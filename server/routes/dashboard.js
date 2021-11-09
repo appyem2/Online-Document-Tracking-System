@@ -1,9 +1,8 @@
 import express from 'express';
+import {getDashboard} from '../controllers/dashboard.js';
 
 const router = express.Router();
 
-router.get("/", function(req, res){
-        res.send("<h1>This is the dashboard page</h1>");
-});
+router.get("/", getDashboard);
 
 export default router;
