@@ -1,4 +1,17 @@
 /* Header Styles */
 #header {
         box-shadow: 0px -8px 20px grey;
+        background-color: white;
+        height: 10vh;
+}
+
+/* Left MenuBar Styles */
+#left-menu-bar {
+        height: 90vh;
+        border-right: 1px ridge lightgray;
+}
+
+#menu-logo{
+        width: 80%;
+        margin: 10px auto;
 }
