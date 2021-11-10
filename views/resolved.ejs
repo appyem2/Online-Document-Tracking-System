@@ -1,0 +1,35 @@
+<%- include('header') %>
+<div class="container-fluid">
+        <div class="row">
+                <%- include('left-menubar', {active: 'resolved'})  %>  
+                <%- include('profile-card') %>
+
+                <div class="col-10 offset-2">
+                        <div class="container mt-5">
+                                <div class="row justify-content-center">
+                                        <div class="col-10">
+                                                <h2>Resolved Documents</h1>
+                                                <p>These are the resolved/inactive documents</p>
+                                        </div>
+                                </div>
+                                
+                                <div class="row justify-content-center">
+                                        <div class="col-10">
+                                                <table class="table table-striped">
+                                                        <thead class="thead-light">
+                                                                <tr>
+                                                                        <th scope="col">Document ID</th>
+                                                                        <th scope="col">Document Subject</th>
+                                                                        <th scope="col">Date of Resolve</th>
+                                                                        <th scope="col">Resolved by</th>
+                                                                </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                </table>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+        </div>
+</div>

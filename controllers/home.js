@@ -1,3 +1,5 @@
+import path from 'path';
+
 export const getHome = function(req, res){
-        res.render("home");
+        res.render(path.resolve('./views/home.ejs'));
 }

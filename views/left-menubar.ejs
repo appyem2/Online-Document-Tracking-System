@@ -1,16 +1,16 @@
-<div class="col-2" id="left-menu-bar">
+<div class="col-2 position-fixed" id="left-menu-bar">
         <div class="row text-center">
                 <img src="/images/iiest-logo.png" alt="IIEST-Logo" id="menu-logo"></img>
                 <h5>Online Document Tracking System</h5>
         </div>
-        <div class="row text-center">
+        <div class="row text-center mt-2">
         <div class="col-12">
-                <p>Pending</p>
-                <p>Forwarded</p>
-                <p>Drafts</p>
-                <p>Authored</p>
-                <p>Resolved</p>
-                <p>All Documents</p>
+                <p><a href="pending" class="<%= active === 'pending' ? 'text-bold':'' %> ">Pending</a></p>
+                <p><a href="forwarded" class="<%= active === 'forwarded' ? 'text-bold':'' %> ">Forwarded</a></p>
+                <p><a href="drafts" class="<%= active === 'drafts' ? 'text-bold':'' %> ">Drafts</a></p>
+                <p><a href="authored" class="<%= active === 'authored' ? 'text-bold':'' %> ">Authored</a></p>
+                <p><a href="resolved" class="<%= active === 'resolved' ? 'text-bold':'' %> ">Resolved</a></p>
+                <p><a href="all-documents" class="<%= active === 'all-documents' ? 'text-bold':'' %> ">All Documents</a></p>
         </div>   
         </div>
 </div>

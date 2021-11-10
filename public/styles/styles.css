@@ -1,3 +1,11 @@
+/* Generic Styles */
+a{
+        text-decoration:none;
+}
+.text-bold{
+        font-weight: bold;
+}
+
 /* Header Styles */
 #header {
         box-shadow: 0px -8px 20px grey;
@@ -14,4 +22,23 @@
 #menu-logo{
         width: 80%;
         margin: 10px auto;
+}
+
+
+/* Dashboard Styles */
+#profilecard{
+        text-align: center;
+        width: 18rem;
+        position: absolute;
+        right: 5px;
+        top: 11vh;
+        z-index: 10;
+}
+
+.hide{
+        display: none;
+}
+
+#profile-icon:hover{
+        color: #0275d8;
 }
