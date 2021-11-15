@@ -28,6 +28,9 @@ export const getAllDocuments = function(req, res){
         res.render(path.resolve('./views/all-documents.ejs'));
 }
 
+export const getCreateNewDoc = function(req, res){
+        res.render(path.resolve('./views/create-new-doc.ejs'));
+}
 
 
 

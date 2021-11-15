@@ -1,0 +1,108 @@
+<%- include('header') %>
+<div class="container-fluid">
+        <div class="row">
+                <%- include('left-menubar', {active: 'create-new-doc'})  %>  
+                <%- include('profile-card') %>
+                
+                <!-- Main Content-->
+                <div class="col-10 offset-2">
+                        <div class="container mt-5 mb-5">
+                                <div class="row justify-content-around">
+                                        <div class="col-5">
+                                                <h2>Create New Document</h2>
+                                        </div>
+                                        <div class="col-4 align-self-end">
+                                                <h5>Document ID: DDMMYYDDUSSS</h5>
+                                        </div>
+                                </div>
+                                
+                                <div class="row justify-content-center mt-2">
+                                        <div class="col-10" id="create-new-doc-form">
+                                                <form>
+                                                        <div class="form-group mt-2 row">
+                                                                <div class="col-6 align-self-start">
+                                                                        <label class="form-label" for="subject">Document Subject</label>
+                                                                        <input type="text" id="subject" class="form-control" />
+                                                                </div>
+                                                                <div class="col-6 align-self-center">
+                                                                        <label class="form-label" for="subject">
+                                                                                <small><strong>Document Subject:</strong> This is the title of the subject that summarizes the content of the document</small>
+                                                                        </label>
+                                                                </div>
+                                                        </div>
+                                                        <div class="form-group mt-2 row">
+                                                                <div class="col-6 align-self-start">
+                                                                        <label class="form-label" for="recipient">Recipient</label>
+                                                                        <select class="form-control">
+                                                                                <option>-- None --</option>
+                                                                        </select>
+                                                                </div>
+                                                                <div class="col-6 align-self-center">
+                                                                        <label class="form-label" for="recipient">
+                                                                                <small><strong>Recipient:</strong> Please select the recipient from the list below. If you cannot find the person, please drop a mail at "support mail id"</small>
+                                                                        </label>
+                                                                </div>
+                                                        </div>
+                                                        <div class="form-group mt-2 row">
+                                                                <div class="col-6 align-self-start">
+                                                                        <label class="form-label" for="method">I will provide the document body by</label>
+                                                                        <select class="form-control" id="method" onchange="chooseUploadType()">
+                                                                                <option>-- None --</option>
+                                                                                <option value="1">Text Entry</option>
+                                                                                <option value="2">Document Upload</option>
+                                                                                <option value="3">Hard Copy</option>
+                                                                        </select>
+                                                                </div>
+                                                                <div class="col-6 align-self-center">
+                                                                        <label class="form-label" for="method">
+                                                                                <small>
+                                                                                        <strong>Mode of Document Upload:</strong>
+                                                                                        <ol>
+                                                                                                <li><u>Text Entry:</u> This will open an embedded text editor, where you can type your document body</li>
+                                                                                                <li><u>Document Upload:</u> This will prompt you to upload the document body as a file in the supported format(s)</li>
+                                                                                                <li><u>Hard Copy:</u> If you wish to share the document in offline mode, then please note the document ID and write it down in the hard copy of your document</li>
+                                                                                        </ol>
+                                                                                </small>
+                                                                        </label>
+                                                                </div>
+                                                        </div>
+                                                        <div class="form-group mt-2 row hide" id="text-entry-div">
+                                                                <div class="col-6 align-self-start">
+                                                                        <label class="form-label" for="text-entry">Document Body</label>
+                                                                        <textarea class="form-control" id="text-entry"></textarea>
+                                                                </div>
+                                                                <div class="col-6 align-self-center">
+                                                                        <small><strong>Document Body:</strong> This contains the main content of the document</small>
+                                                                </div>
+                                                        </div>
+                                                        <div class="form-group mt-2 row hide" id="doc-upload-div">
+                                                                <div class="col-6 align-self-start">
+                                                                        <label class="form-label" for="doc-upload">Document Body</label>
+                                                                        <input type="file" class="form-control" id="doc-upload">
+                                                                        <small class="text-muted">The maximum file size is 4 MB and the preferred file format is PDF.</small>
+                                                                </div>
+                                                                <div class="col-6 align-self-center">
+                                                                        <small><strong>Document Body:</strong> This contains the main content of the document</small>
+                                                                </div>
+                                                        </div>
+                                                        <div class="form-group mt-2 row hide" id="hard-copy-div">
+                                                                <div class="col-6 align-self-start">
+                                                                        <label class="form-label" for="hard-copy">Document Body</label>
+                                                                        <input type="text" class="form-control" id="hard-copy" readonly value="The document will be sent in a hard copy ">
+                                                                </div>
+                                                                <div class="col-6 align-self-center">
+                                                                        <small><strong>Document Body:</strong> This contains the main content of the document</small>
+                                                                </div>
+                                                        </div>
+                                                </form>
+                                        </div>
+                                        <div class="col-6">
+                                                <div class="form-group mt-2">
+                                                        
+                                                </div>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+        </div>
+</div>
