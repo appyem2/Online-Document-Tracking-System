@@ -1,30 +1,11 @@
-<%- include('head') %>
+<%- include('./partials/head') %>
         <div id="home">
                 <div class="container text-center" id="home">
                         <div class="row justify-content-center">
-                                <div class="col-12 col-md-6 align-self-center" id="left-div">
-                                        <img src="./images/iiest-logo.png" alt="IIEST Logo" id="home-logo"/>
-                                        <h3>Online Document Tracking System</h3>
-                                        <p>Please mail your concerns to "support mail id"</p>
-                                </div>
-                                <div class="col-12 col-md-6 col-lg-4 offset-lg-1 align-self-center">
-                                        <h3 class="mb-5">Welcome!</h3>
-                                        <form class="homepage-form">
-                                                <div class="form-group row mt-2">
-                                                        <input type="text" class="form-control" placeholder="Registered Email ID" required/>
-                                                </div>
-                                                <div class="form-group row mt-2">
-                                                        <input type="password" class="form-control" placeholder="Password" required/>
-                                                </div>
-                                                <div class="form-group row mt-2">
-                                                        <button type="submit" class="btn btn-outline-light">Sign In</button>
-                                                </div>
-                                        </form>
-                                        <hr/>
-                                        <small ><a class="btn btn-light" href=#>Forgot Password?</a></small>
-                                </div>
+                                <%- include('./partials/landing-logo') %>
+                                <%- include('./partials/login-form') %>
                         </div>
                 </div>
         </div>
         
-<%- include('foot') %>  
+<%- include('./partials/foot') %>  
