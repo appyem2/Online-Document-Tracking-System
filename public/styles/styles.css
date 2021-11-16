@@ -42,3 +42,26 @@ a{
 #profile-icon:hover{
         color: #0275d8;
 }
+
+/*Home Page Styles*/
+#home{
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        background-color: skyblue;
+        background-image: linear-gradient(to top left, #085078, #85D8CE);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        color: white;
+}
+#home-logo{
+        width: 50%;
+}
+
+.homepage-form input::placeholder{
+        text-align: center;
+}
+
+#left-div{
+        border-right: 1px ridge lightblue;
+}
