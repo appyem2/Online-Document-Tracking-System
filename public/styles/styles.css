@@ -12,6 +12,10 @@ a{
         background-color: white;
         height: 10vh;
 }
+#header img {
+        height: 50px;
+        width: 50px;
+}
 
 /* Left MenuBar Styles */
 #left-menu-bar {
@@ -33,6 +37,11 @@ a{
         right: 5px;
         top: 11vh;
         z-index: 10;
+}
+
+#profilecard img{
+        height: 100px;
+        width: 100px;
 }
 
 .hide{
