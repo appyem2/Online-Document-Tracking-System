@@ -1,9 +1,9 @@
 import express from 'express';
-import {getPending, getForwarded, getDrafts, getResolved, getAuthored, getAllDocuments, getCreateNewDoc} from '../controllers/dashboard.js';
+import {getPending, getForwarded, getDrafts, getResolved, getAuthored, getAllDocuments, getCreateNewDoc, getDashboard} from '../controllers/dashboard.js';
 
 const router = express.Router();
 
-router.get("/", getPending);
+router.get("/", getDashboard);
 router.get("/pending", getPending);
 router.get("/forwarded", getForwarded);
 router.get("/drafts", getDrafts);

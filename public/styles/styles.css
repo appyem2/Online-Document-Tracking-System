@@ -52,6 +52,11 @@ a{
         color: #0275d8;
 }
 
+.modal-title {
+        width: 100%;
+        text-align: center;
+}
+
 /*Home Page Styles*/
 #home{
         min-height: 100vh;
