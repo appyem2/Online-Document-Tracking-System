@@ -1,10 +1,10 @@
-<%- include('./partials/header') %>
+<%- include('./partials/header', {user: user}) %>
 <div class="container-fluid">
         <div class="row">
                 
-                <%- include('./partials/left-menubar', {active: 'pending'})  %>  
-                <%- include('./partials/profile-card') %>
-                <%- include('./partials/summary-modal') %>
+                <%- include('./partials/left-menubar', {active: 'pending', user: user})  %>  
+                <%- include('./partials/profile-card', {user: user}) %>
+                <%- include('./partials/summary-modal', {user: user}) %>
                 
                 <!-- Main Content-->
                 <div class="col-10 offset-2">

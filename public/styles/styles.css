@@ -15,6 +15,8 @@ a{
 #header img {
         height: 50px;
         width: 50px;
+        object-fit: cover;
+        overflow: hidden;
 }
 
 /* Left MenuBar Styles */
@@ -42,6 +44,8 @@ a{
 #profilecard img{
         height: 100px;
         width: 100px;
+        object-fit: cover;
+        overflow: hidden;      
 }
 
 .hide{

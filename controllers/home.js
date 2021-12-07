@@ -41,10 +41,10 @@ export const postLogin = function(req, res){
                         if(userFound.firstTime){
                                 // Logging in for the first time
                                 console.log("Loggin in for the first time");
-                                res.redirect("/dashboard");
+                                res.redirect("/dashboard/" + userFound.id);
                         }else{
                                 // Dashboard of the user
-                                res.redirect("/dashboard");
+                                res.redirect("/dashboard/" + userFound.id);
                         }
                 }
         }

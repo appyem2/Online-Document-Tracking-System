@@ -3,14 +3,14 @@ import {getPending, getForwarded, getDrafts, getResolved, getAuthored, getAllDoc
 
 const router = express.Router();
 
-router.get("/", getDashboard);
-router.get("/pending", getPending);
-router.get("/forwarded", getForwarded);
-router.get("/drafts", getDrafts);
-router.get("/authored", getAuthored);
-router.get("/resolved", getResolved);
-router.get("/all-documents", getAllDocuments);
-router.get("/create-new-doc", getCreateNewDoc);
+router.get("/:userID", getDashboard);
+router.get("/:userID/pending", getPending);
+router.get("/:userID/forwarded", getForwarded);
+router.get("/:userID/drafts", getDrafts);
+router.get("/:userID/authored", getAuthored);
+router.get("/:userID/resolved", getResolved);
+router.get("/:userID/all-documents", getAllDocuments);
+router.get("/:userID/create-new-doc", getCreateNewDoc);
 
 
 export default router;

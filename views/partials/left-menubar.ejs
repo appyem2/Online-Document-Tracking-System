@@ -5,12 +5,12 @@
         </div>
         <div class="row text-center mt-2">
         <div class="col-12">
-                <p><a href="/dashboard/pending" class="<%= active === 'pending' ? 'text-bold':'' %> ">Pending</a></p>
-                <p><a href="/dashboard/forwarded" class="<%= active === 'forwarded' ? 'text-bold':'' %> ">Forwarded</a></p>
-                <p><a href="/dashboard/drafts" class="<%= active === 'drafts' ? 'text-bold':'' %> ">Drafts</a></p>
-                <p><a href="/dashboard/authored" class="<%= active === 'authored' ? 'text-bold':'' %> ">Authored</a></p>
-                <p><a href="/dashboard/resolved" class="<%= active === 'resolved' ? 'text-bold':'' %> ">Resolved</a></p>
-                <p><a href="/dashboard/all-documents" class="<%= active === 'all-documents' ? 'text-bold':'' %> ">All Documents</a></p>
+                <p><a href="/dashboard/<%= user.id %>/pending" class="<%= active === 'pending' ? 'text-bold':'' %> ">Pending</a></p>
+                <p><a href="/dashboard/<%= user.id %>/forwarded" class="<%= active === 'forwarded' ? 'text-bold':'' %> ">Forwarded</a></p>
+                <p><a href="/dashboard/<%= user.id %>/drafts" class="<%= active === 'drafts' ? 'text-bold':'' %> ">Drafts</a></p>
+                <p><a href="/dashboard/<%= user.id %>/authored" class="<%= active === 'authored' ? 'text-bold':'' %> ">Authored</a></p>
+                <p><a href="/dashboard/<%= user.id %>/resolved" class="<%= active === 'resolved' ? 'text-bold':'' %> ">Resolved</a></p>
+                <p><a href="/dashboard/<%= user.id %>/all-documents" class="<%= active === 'all-documents' ? 'text-bold':'' %> ">All Documents</a></p>
         </div>   
         </div>
 </div>

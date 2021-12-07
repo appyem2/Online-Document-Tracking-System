@@ -1,9 +1,13 @@
 <div class="card hide" id="profilecard">
         <div class="card-body">
-                <img src="/images/no-user-100.png" alt="No Profile Picture" class="rounded-circle">
-                <h5 class="card-title">Dr. Indrajit Banerjee</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Associate Professor</h6>
-                <p class="card-subtitle mb-2 text-muted">Dept. of Information Technology</h6>
+                <% if (user.profilePic == '') { %>
+                        <img src="/images/no-user-100.png" alt="No Profile Picture" class="rounded-circle">
+                <% } else { %>
+                        <img src="/images/<%= user.profilePic %>" alt="Profile Picture" class="rounded-circle">                        
+                <% } %>
+                <h5 class="card-title"><%= user.prefix %> <%= user.firstName %> <%= user.middleName %> <%= user.lastName %></h5>
+                <h6 class="card-subtitle mb-2 text-muted"><%= user.designation %></h6>
+                <p class="card-subtitle mb-2 text-muted">Dept. of <%= user.department %></h6>
                 <ul class="list-group list-group-flush">
                         <li class="list-group-item">View Profile</li>
                         <li class="list-group-item">Change Password</li>

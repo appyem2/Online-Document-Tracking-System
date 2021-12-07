@@ -1,8 +1,8 @@
-<%- include('./partials/header') %>
+<%- include('./partials/header', {user: user}) %>
 <div class="container-fluid">
         <div class="row">
-                <%- include('./partials/left-menubar', {active: 'create-new-doc'})  %>  
-                <%- include('./partials/profile-card') %>
+                <%- include('./partials/left-menubar', {active: 'create-new-doc', user: user})  %>  
+                <%- include('./partials/profile-card', {user: user}) %>
                 
                 <!-- Main Content-->
                 <div class="col-10 offset-2">
