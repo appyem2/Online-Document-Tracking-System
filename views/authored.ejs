@@ -13,7 +13,18 @@
                                                 <% if (user.documents.authored.length > 0) { %>
                                                         <p>These are the documents you have created</p>
                                                 <% } else { %>
-                                                        <p>You are yet to create your first document!</p>
+                                                        <h5>You are yet to create your first document!</h5>
+                                                        <div class="col-10">
+                                                                <p>You can immediately start creating one following these easy steps:</p>
+                                                                <ul>
+                                                                        <p><em class="bi bi-arrow-right-circle"></em>&ensp;Click on the <a href="/dashboard/<%= user.id %>/create-new-doc">Create New Document</a> button on the header to access the "Create New Document" page</p>
+                                                                        <p><em class="bi bi-arrow-right-circle"></em>&ensp;First, make sure to take a note of the "Document ID" that is system generated and uniquely identifies your document</p>
+                                                                        <p><em class="bi bi-arrow-right-circle"></em>&ensp;Then, start by filling in the "Subject Line" that summerizes your document content</p>
+                                                                        <p><em class="bi bi-arrow-right-circle"></em>&ensp;Choose the recipient of the document from the drop-down list</p>
+                                                                        <p><em class="bi bi-arrow-right-circle"></em>&ensp;You can either choose to instantly write your document body in the integrated text editor or upload a .pdf document that you've already written</p>
+                                                                        <p><em class="bi bi-arrow-right-circle"></em>&ensp;Finally, you can either save your document as a draft by clicking on the "Save for Later" button or you can immediately send it to the recipient by simply clicking on the "Send Now" button</p>
+                                                                </ul>
+                                                        </div>
                                                 <% } %>
                                         </div>
                                 </div>

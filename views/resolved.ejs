@@ -10,9 +10,20 @@
                                         <div class="col-10">
                                                 <h2>Resolved Documents</h1><hr> 
                                                 <% if (user.documents.resolved.length) { %>
-                                                        <p>These are the resolved/inactive documents</p>
+                                                        <h5>These are the resolved/inactive documents</h5>
                                                 <% } else { %>
-                                                        <p>None of your documents got resolved recently!</p>
+                                                        <h5>None of your documents got resolved recently!</h5>
+                                                        <div class="col-10">
+                                                                <p>By the meantime you can check out your other documents by following this quick links:</p>
+                                                                <ul>
+                                                                        <p><em class="bi bi-arrow-right-circle"></em>&ensp;Want to finish the <strong>pending</strong> documents? Click <a href="/dashboard/<%= user.id %>/pending">here</a> </p>
+                                                                        <p><em class="bi bi-arrow-right-circle"></em>&ensp;Want to check status of your <strong>forwarded</strong> documents? Click <a href="/dashboard/<%= user.id %>/forwarded">here</a> </p>
+                                                                        <p><em class="bi bi-arrow-right-circle"></em>&ensp;Want to complete the <strong>draft</strong> you started last time? Click <a href="/dashboard/<%= user.id %>/forwarded">here</a> </p>
+                                                                        <p><em class="bi bi-arrow-right-circle"></em>&ensp;Want to create a <strong>new document</strong>? Click <a href="/dashboard/<%= user.id %>/create-new-doc">here</a> </p>
+                                                                        <p><em class="bi bi-arrow-right-circle"></em>&ensp;Want to check status of your <strong>authored</strong> documents? Click <a href="/dashboard/<%= user.id %>/authored">here</a> </p>
+                                                                        <p><em class="bi bi-arrow-right-circle"></em>&ensp;Want to search through <strong>all</strong> of your documents? Click <a href="/dashboard/<%= user.id %>/all-documents">here</a> </p>
+                                                                </ul>
+                                                        </div>
                                                 <% } %>
                                         </div>
                                 </div>
