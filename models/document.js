@@ -6,6 +6,7 @@ const documentSchema = new mongoose.Schema({
                 default: new Date()
         },
         author: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+        subject: String,
         userChain: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
 });
 

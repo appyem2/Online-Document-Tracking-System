@@ -5,6 +5,9 @@ import ejs from 'ejs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
+import multer from 'multer';
+import GridFsStorage from 'multer-gridfs-storage';
+import Grid from 'gridfs-stream';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -29,10 +32,15 @@ const port = process.env.PORT || 8080;
 
 // Setup the MongoDB database
 const CONNECTION_URL = "mongodb+srv://"+"admin-souradip"+":"+"510818009"+"@cluster0.kfy9c.mongodb.net/"+"majorProjectDB"+"?retryWrites=true&w=majority"
-mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+const conn = mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
         .then(() => app.listen(port, function() {
                 console.log('express server listening on port ' + port);
         }))
         .catch((error) => console.error(error.message));
+
+// Init gfs
+let gfs;
+
+
 
 

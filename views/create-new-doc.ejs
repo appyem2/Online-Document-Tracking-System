@@ -18,11 +18,11 @@
                                 
                                 <div class="row justify-content-center mt-2">
                                         <div class="col-10" id="create-new-doc-form">
-                                                <form>
+                                                <form action="/dashboard/<%= user.id %>/create-new-doc" method="post"> 
                                                         <div class="form-group mt-2 row">
                                                                 <div class="col-6 align-self-start">
                                                                         <label class="form-label" for="subject">Document Subject <span class="text-danger">*</span></label>
-                                                                        <input type="text" id="subject" class="form-control" required/>
+                                                                        <input type="text" id="subject" class="form-control" name="subject" required/>
                                                                 </div>
                                                                 <div class="col-6 align-self-center">
                                                                         <label class="form-label" for="subject">
@@ -33,8 +33,13 @@
                                                         <div class="form-group mt-2 row">
                                                                 <div class="col-6 align-self-start">
                                                                         <label class="form-label" for="recipient">Recipient <span class="text-danger">*</span></label>
-                                                                        <select class="form-control" id="recipient" required>
+                                                                        <select class="form-control" id="recipient" name="recipient" required>
                                                                                 <option>-- None --</option>
+                                                                                <% users.forEach(userToSend => { %>
+                                                                                        <% if (userToSend.firstName !== "") { %>
+                                                                                                <option value="<%= userToSend._id %>"><%= userToSend.prefix %> <%=userToSend.firstName%> <%=userToSend.middleName%> <%=userToSend.lastName%></option>
+                                                                                        <% } %>
+                                                                                <% }) %>
                                                                         </select>
                                                                 </div>
                                                                 <div class="col-6 align-self-center">
@@ -46,9 +51,9 @@
                                                         <div class="form-group mt-2 row">
                                                                 <div class="col-6 align-self-start">
                                                                         <label class="form-label" for="method">I will provide the document body by <span class="text-danger">*</span></label>
-                                                                        <select class="form-control" id="method" onchange="chooseUploadType()">
-                                                                                <option value="1">Text Entry</option>
-                                                                                <option value="2" selected>Document Upload</option>
+                                                                        <select class="form-control" id="method" name="uploadType" onchange="chooseUploadType()">
+                                                                                <option value="1" selected>Text Entry</option>
+                                                                                <option value="2">Document Upload</option>
                                                                                 <option value="3">Hard Copy</option>
                                                                         </select>
                                                                 </div>
@@ -73,26 +78,26 @@
                                                                         <small><strong>Document Body:</strong> This contains the main content of the document</small>
                                                                 </div>
                                                         </div>
-                                                        <div class="form-group mt-2 row hide" id="text-entry-div">
+                                                        <div class="form-group mt-2 row" id="text-entry-div">
                                                                 <div class="col-12 align-self-start">
-                                                                        <textarea class="form-control" id="text-entry" required></textarea>
+                                                                        <textarea name="input-text" class="form-control" id="text-entry"></textarea>
                                                                 </div>
                                                         </div>
-                                                        <div class="form-group mt-2 row" id="doc-upload-div">
+                                                        <div class="form-group mt-2 row hide" id="doc-upload-div">
                                                                 <div class="col-6 align-self-start">
-                                                                        <input type="file" class="form-control" id="doc-upload" required>
+                                                                        <input name="input-file" type="file" class="form-control" id="doc-upload">
                                                                         <small class="text-muted">The maximum file size is 4 MB and the preferred file format is PDF.</small>
                                                                 </div>
                                                         </div>
                                                         <div class="form-group mt-2 row hide" id="hard-copy-div">
                                                                 <div class="col-6 align-self-start">
-                                                                        <input type="text" class="form-control" id="hard-copy" readonly value="The document will be sent in a hard copy ">
+                                                                        <input name="input-text-default" type="text" class="form-control" id="hard-copy" readonly value="The document will be sent in a hard copy ">
                                                                 </div>
                                                         </div>
                                                         <div class="form-group mt-5 mb-5 row justify-content-center">
                                                                 <div class="col-3 align-self-end">
-                                                                        <button type="button" class="btn btn-secondary">Save for Later</button>
-                                                                        <button type="button" class="btn btn-primary">Send Now</button>
+                                                                        <button name="Save" type="submit" class="btn btn-secondary" value="Save">Save for Later</button>
+                                                                        <button name="Send" type="submit" class="btn btn-primary" value="Send">Send Now</button>
                                                                 </div>
                                                         </div>
                                                 </form>

@@ -139,9 +139,13 @@ export const getCreateNewDoc = function(req, res){
                 if(err) return handleError(err);
 
                 if(user){
-                        res.render(path.resolve('./views/create-new-doc.ejs'), {
-                                user: user, 
-                        });
+                        User.find({_id: {$ne: userID}}, (errUsers, users) => {
+                                if(errUsers) return handleError(errUsers);
+                                res.render(path.resolve('./views/create-new-doc.ejs'), {
+                                        user: user, 
+                                        users: users
+                                });
+                        })
                 }
         })
 }
@@ -180,7 +184,7 @@ export const postEditProfile = function(req, res){
         
 }
 
-// controller function to render "Edit Password" request
+// controller function to handle "Edit Password" request
 export const postEditPassword = function(req, res){
         const data = req.body;
         const userID = req.params.userID;
@@ -200,4 +204,33 @@ export const postEditPassword = function(req, res){
 
 }
 
+// controller function to hadle "Create New Document" request
+export const createNewDocument = function(req, res){
+
+        const data = req.body;
+        const userID = req.params.userID;
+
+        // User.findById(userID, (err, user) => {
+        //         if(err) return handleError(err);
+
+        //         if(user){
+        //                 const newDocument = new Document({
+        //                         subject: data.subject,
+        //                         author: userID,
+        //                         userChain: [userID, data.recipient],
+        //                 });
+
+        //                 // Handle if "Save for Later Chosen"
+        //                 if(data["Save"] == "Save"){
+
+        //                 }
+        //                 // Handle if "Send Now"
+        //                 else if(data["Send"] == "Send"){
+
+        //                 }
+        //         }
+        // })
+
+
+}
 
