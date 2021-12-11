@@ -4,33 +4,39 @@
                 <%- include('./partials/left-menubar', {active: 'forwarded', user: user})  %>  
                 <%- include('./partials/profile-card', {user: user}) %>
 
-                                <!-- Main Content-->
+                <!-- Main Content-->
                 <div class="col-10 offset-2">
                         <div class="container mt-5">
                                 <div class="row justify-content-center">
                                         <div class="col-10">
-                                                <h2>Forwarded Documents</h1>
-                                                <p>These are the documents you have already forwarded</p>
+                                                <h2>Forwarded Documents</h1><hr>
+                                                <% if (user.documents.forwarded.length > 0) { %>
+                                                        <p>These are the documents you have already forwarded</p>
+                                                <% } else { %>
+                                                        <p>You are yet to forward your first document</p>
+                                                <% } %>
                                         </div>
                                 </div>
                                 
-                                <div class="row justify-content-center">
-                                        <div class="col-10">
-                                                <table class="table table-striped">
-                                                        <thead class="thead-light">
-                                                                <tr>
-                                                                        <th scope="col">Document ID</th>
-                                                                        <th scope="col">Document Subject</th>
-                                                                        <th scope="col">Date Forwarded</th>
-                                                                        <th scope="col">Received From</th>
-                                                                        <th scope="col">Forwarded To</th>
-                                                                </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        </tbody>
-                                                </table>
+                                <% if (user.documents.forwarded.length > 0){ %>
+                                        <div class="row justify-content-center">
+                                                <div class="col-10">
+                                                        <table class="table table-striped">
+                                                                <thead class="thead-light">
+                                                                        <tr>
+                                                                                <th scope="col">Document ID</th>
+                                                                                <th scope="col">Document Subject</th>
+                                                                                <th scope="col">Date Forwarded</th>
+                                                                                <th scope="col">Received From</th>
+                                                                                <th scope="col">Forwarded To</th>
+                                                                        </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                </tbody>
+                                                        </table>
+                                                </div>
                                         </div>
-                                </div>
+                                <% } %>
                         </div>
                 </div>
         </div>

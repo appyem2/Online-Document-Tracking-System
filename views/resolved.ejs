@@ -8,27 +8,33 @@
                         <div class="container mt-5">
                                 <div class="row justify-content-center">
                                         <div class="col-10">
-                                                <h2>Resolved Documents</h1>
-                                                <p>These are the resolved/inactive documents</p>
+                                                <h2>Resolved Documents</h1><hr> 
+                                                <% if (user.documents.resolved.length) { %>
+                                                        <p>These are the resolved/inactive documents</p>
+                                                <% } else { %>
+                                                        <p>None of your documents got resolved recently!</p>
+                                                <% } %>
                                         </div>
                                 </div>
                                 
-                                <div class="row justify-content-center">
-                                        <div class="col-10">
-                                                <table class="table table-striped">
-                                                        <thead class="thead-light">
-                                                                <tr>
-                                                                        <th scope="col">Document ID</th>
-                                                                        <th scope="col">Document Subject</th>
-                                                                        <th scope="col">Date of Resolve</th>
-                                                                        <th scope="col">Resolved by</th>
-                                                                </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        </tbody>
-                                                </table>
+                                <% if (user.documents.resolved.length) { %>
+                                        <div class="row justify-content-center">
+                                                <div class="col-10">
+                                                        <table class="table table-striped">
+                                                                <thead class="thead-light">
+                                                                        <tr>
+                                                                                <th scope="col">Document ID</th>
+                                                                                <th scope="col">Document Subject</th>
+                                                                                <th scope="col">Date of Resolve</th>
+                                                                                <th scope="col">Resolved by</th>
+                                                                        </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                </tbody>
+                                                        </table>
+                                                </div>
                                         </div>
-                                </div>
+                                <% } %>
                         </div>
                 </div>
         </div>

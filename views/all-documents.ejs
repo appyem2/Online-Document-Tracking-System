@@ -9,32 +9,38 @@
                         <div class="container mt-5">
                                 <div class="row justify-content-center">
                                         <div class="col-10">
-                                                <h2>All Documents</h2>
+                                                <h2>All Documents</h2><hr>
+                                                <% if (user.documents.all.length == 0) { %>
+                                                        <p>We have no documents to show currently</p>                                         
+                                                <% } %>
+
                                         </div>
                                 </div>
 
-                                <div class="row justify-content-around">
-                                        <div class="col-10"></div>
-                                </div>
-                                
-                                <div class="row justify-content-center">
-                                        <div class="col-10">
-                                                <table class="table table-striped">
-                                                        <thead class="thead-light">
-                                                                <tr>
-                                                                        <th scope="col">Document ID</th>
-                                                                        <th scope="col">Document Subject</th>
-                                                                        <th scope="col">Current Status</th>
-                                                                        <th scope="col">Date Modified</th>   
-                                                                        <th scope="col">Received From</th>
-                                                                        <th scope="col">Forwarded To</th>
-                                                                </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        </tbody>
-                                                </table>
+                                <% if (user.documents.all.length) { %>
+                                        <div class="row justify-content-around">
+                                                <div class="col-10"></div>
                                         </div>
-                                </div>
+                                        
+                                        <div class="row justify-content-center">
+                                                <div class="col-10">
+                                                        <table class="table table-striped">
+                                                                <thead class="thead-light">
+                                                                        <tr>
+                                                                                <th scope="col">Document ID</th>
+                                                                                <th scope="col">Document Subject</th>
+                                                                                <th scope="col">Current Status</th>
+                                                                                <th scope="col">Date Modified</th>   
+                                                                                <th scope="col">Received From</th>
+                                                                                <th scope="col">Forwarded To</th>
+                                                                        </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                </tbody>
+                                                        </table>
+                                                </div>
+                                        </div>                                 
+                                <% } %>
                         </div>
                 </div>
         </div>

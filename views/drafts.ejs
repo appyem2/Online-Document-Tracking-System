@@ -9,26 +9,34 @@
                         <div class="container mt-5">
                                 <div class="row justify-content-center">
                                         <div class="col-10">
-                                                <h2>Drafts</h2>
-                                                <p>Seems like you have some drafts pending</p>
+                                                <h2>Drafts</h2><hr>
+                                                <% if (user.documents.drafts.length > 0) { %>
+                                                        <p>Seems like you have some drafts pending</p>
+                                                <% } else { %>
+                                                        <p>You don't have any drafts to complete</p>
+                                                <% } %>
                                         </div>
                                 </div>
                                 
-                                <div class="row justify-content-center">
-                                        <div class="col-10">
-                                                <table class="table table-striped">
-                                                        <thead class="thead-light">
-                                                                <tr>
-                                                                        <th scope="col">Document ID</th>
-                                                                        <th scope="col">Document Subject</th>
-                                                                        <th scope="col">Date Modified</th>
-                                                                </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        </tbody>
-                                                </table>
+                                <% if (user.documents.drafts.length > 0) { %>
+                                        
+                                        <div class="row justify-content-center">
+                                                <div class="col-10">
+                                                        <table class="table table-striped">
+                                                                <thead class="thead-light">
+                                                                        <tr>
+                                                                                <th scope="col">Document ID</th>
+                                                                                <th scope="col">Document Subject</th>
+                                                                                <th scope="col">Date Modified</th>
+                                                                        </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                </tbody>
+                                                        </table>
+                                                </div>
                                         </div>
-                                </div>
+                                
+                                <% } %>
                         </div>
                 </div>
         </div>

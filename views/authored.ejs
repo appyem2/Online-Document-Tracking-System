@@ -9,28 +9,35 @@
                         <div class="container mt-5">
                                 <div class="row justify-content-center">
                                         <div class="col-10">
-                                                <h2>My Documents</h2>
-                                                <p>These are the documents you’ve created</p>
+                                                <h2>My Documents</h2><hr>
+                                                <% if (user.documents.authored.length > 0) { %>
+                                                        <p>These are the documents you have created</p>
+                                                <% } else { %>
+                                                        <p>You are yet to create your first document!</p>
+                                                <% } %>
                                         </div>
                                 </div>
                                 
-                                <div class="row justify-content-center">
-                                        <div class="col-10">
-                                                <table class="table table-striped">
-                                                        <thead class="thead-light">
-                                                                <tr>
-                                                                        <th scope="col">Document ID</th>
-                                                                        <th scope="col">Document Subject</th>
-                                                                        <th scope="col">Date of Creation</th>
-                                                                        <th scope="col">Forwarded To</th>
-                                                                        <th scope="col">Current Status</th>
-                                                                </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        </tbody>
-                                                </table>
+                                <% if (user.documents.authored.length > 0) { %>
+                                        <div class="row justify-content-center">
+                                                <div class="col-10">
+                                                        <table class="table table-striped">
+                                                                <thead class="thead-light">
+                                                                        <tr>
+                                                                                <th scope="col">Document ID</th>
+                                                                                <th scope="col">Document Subject</th>
+                                                                                <th scope="col">Date of Creation</th>
+                                                                                <th scope="col">Forwarded To</th>
+                                                                                <th scope="col">Current Status</th>
+                                                                        </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                </tbody>
+                                                        </table>
+                                                </div>
                                         </div>
-                                </div>
+                                <% } %>
+                                
                         </div>
                 </div>
         </div>

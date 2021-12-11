@@ -1,25 +1,29 @@
 import path from 'path';
-import bodyParser from 'body-parser';
 import User from '../models/user.js';
 
+// controller function to render "Home Page"
 export const getHome = function(req, res){
         res.render(path.resolve('./views/home.ejs'), {
                 error: undefined,
         });
 }
 
+// controller function to render "Forgot Password Page 1"
 export const getForgotPassword1 = function(req, res){
         res.render(path.resolve('./views/forgot-pwd-1.ejs'));
 }
 
+// controller function to render "Forgot Password Page 2"
 export const getForgotPassword2 = function(req, res){
         res.render(path.resolve('./views/forgot-pwd-2.ejs'));
 }
 
+// controller function to render "Forgot Password Page 3"
 export const getForgotPassword3 = function(req, res){
         res.render(path.resolve('./views/forgot-pwd-3.ejs'));
 }
 
+// controller function to handle "Login" Request
 export const postLogin = function(req, res){
 
 
