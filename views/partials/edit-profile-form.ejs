@@ -1,0 +1,105 @@
+<div class="container">
+        <div class="row">
+                <div class="col-12">
+                        <form action="/dashboard/<%= user.id %>/edit-profile" method="post">
+
+                                <div class="input-group row mb-3">
+                                        <div class="col-12 text-center">
+                                                <h3>Profile Details</h3>
+                                        </div>
+                                </div>
+                                <div class="input-group row mb-2">
+                                        <div class="col-2">
+                                                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                                        </div>
+                                        <div class="col-10">
+                                                <input id="email" type="email" name="email" value="<%= user.email %>" readonly class="form-control">
+                                        </div>
+                                        
+                                </div>
+                                
+                                <div class="input-group row mb-2">
+                                        <div class="col-2">
+                                                <label for="prefix" class="form-label">Prefix <span class="text-danger">*</span></label>
+                                        </div>
+                                        <div class="col-10">
+                                                <select id="prefix" name="prefix" class="form-select" aria-label="prefix select" required>
+                                                        <option selected value="">Prefix</option>
+                                                        <option <%= user.prefix === "Dr." ? "selected" : "" %>  value="Dr.">Dr.</option>
+                                                        <option <%= user.prefix === "Mr." ? "selected" : "" %> value="Mr.">Mr.</option>
+                                                        <option <%= user.prefix === "Mrs." ? "selected" : "" %> value="Mrs.">Mrs.</option>
+                                                        <option <%= user.prefix === "Ms." ? "selected" : "" %> value="Ms.">Ms.</option>
+                                                </select>
+                                        </div>
+                                </div>
+                                
+                                <div class="input-group row mb-2">
+                                        <div class="col-2">
+                                                <label for="firstName" class="form-label">Name <span class="text-danger">*</span></label>
+                                        </div>
+                                        <div class="col-4">
+                                                <input type="text" name="firstName" id="firstName" value="<%= user.firstName %>" class="form-control" placeholder="First Name" required>
+                                        </div>
+                                        <div class="col-3">
+                                                <input type="text" name="middleName" id="middleName" value="<%= user.middleName %>" class="form-control" placeholder="Middle Name">
+                                        </div>
+                                        <div class="col-3">
+                                                <input type="text" name="lastName" id="lastName" value="<%= user.lastName %>" class="form-control" placeholder="Last Name" required>
+                                        </div>
+                                </div>
+
+                                <div class="input-group row mb-2">
+                                        <div class="col-2">
+                                                <label for="group" class="form-label">Group <span class="text-danger">*</span></label>
+                                        </div>
+                                        <div class="col-10">
+                                                <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="group" id="inlineRadio1" value="Faculty" <%= user.group === "Faculty" ? "checked" : "" %> >
+                                                        <label class="form-check-label" for="inlineRadio1">Faculty</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="group" id="inlineRadio2" value="Student" <%= user.group === "Student" ? "checked" : "" %>>
+                                                        <label class="form-check-label" for="inlineRadio2">Student</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="group" id="inlineRadio3" value="Ofiicials" <%= user.group === "Officials" ? "checked" : "" %> >
+                                                        <label class="form-check-label" for="inlineRadio3">Administrative Officer</label>
+                                                </div>
+                                        </div>
+                                </div>
+
+                                <div class="input-group row mb-2">
+                                        <div class="col-2">
+                                                <label for="department" class="form-label">Department <span class="text-danger">*</span></label>
+                                        </div>
+                                        <div class="col-10">
+                                                <input id="department" type="text" name="department" value="<%= user.department %>"  class="form-control" required>
+                                        </div>
+                                </div>
+
+                                <div class="input-group row mb-2">
+                                        <div class="col-2">
+                                                <label for="designation" class="form-label">Designation <span class="text-danger">*</span></label>
+                                        </div>
+                                        <div class="col-10">
+                                                <input id="designation" type="text" name="designation" value="<%= user.designation %>"  class="form-control" required>
+                                        </div>
+                                </div>
+
+                                <div class="input-group row mb-3">
+                                        <div class="col-2">
+                                                <label for="profilePic" class="form-label">Profile Picture</label>
+                                        </div>
+                                        <div class="col-10">
+                                                <input name="profilePic" class="form-control" type="file" id="profilePic" accept="image/png, image/jpeg, image/jpg">
+                                        </div>
+                                </div>
+
+                                <div class="d-grid gap-2 col-6 mx-auto">
+                                        <button class="btn btn-primary" type="submit">Save Personal Details</button>
+                                </div>
+
+                        </form>
+                </div>
+        </div>
+</div>

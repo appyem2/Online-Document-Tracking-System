@@ -1,8 +1,6 @@
 import path from 'path';
-import users from '../users.js';
-import documents from '../documents.js';
 import bodyParser from 'body-parser';
-import e from 'express';
+import User from '../models/user.js';
 
 export const getHome = function(req, res){
         res.render(path.resolve('./views/home.ejs'), {
@@ -24,34 +22,41 @@ export const getForgotPassword3 = function(req, res){
 
 export const postLogin = function(req, res){
 
+
         const email = req.body.email;
         const password = req.body.password;
         var error = undefined;
 
         // Find the user using the email ID
-        const userFound = users.find((user) => user.email === email);
+        User.find({email: email}, (err, users) => {
 
 
-        if(userFound === undefined){
-                error = "Login Error: Email ID is not registered";      // User does not exist
-        }else{
-                if(userFound.password != password){
-                        error = "Login Error: Password is incorrect";   // Password Mismatch
+                if(err) return handleError(err);
+
+                if(users.length == 0){
+                        error = "Login Error: Email ID is not registered";      // User does not exist
                 }else{
-                        if(userFound.firstTime){
-                                // Logging in for the first time
-                                console.log("Loggin in for the first time");
-                                res.redirect("/dashboard/" + userFound.id);
+                        const user = users[0];
+                        console.log(user);
+                        if(user.password != password){
+                                error = "Login Error: Password is incorrect";   // Password Mismatch
                         }else{
-                                // Dashboard of the user
-                                res.redirect("/dashboard/" + userFound.id);
+                                if(user.firstTime){
+                                        // Logging in for the first time
+                                        res.redirect("/dashboard/" + user.id + "/initial-setup");
+                                }else{
+                                        // Dashboard of the user
+                                        res.redirect("/dashboard/" + user.id);
+                                }
                         }
                 }
-        }
 
-        if(error != undefined){
-                res.render(path.resolve('./views/home.ejs'), {
-                        error: error
-                });
-        }
+                if(error != undefined){
+                        res.render(path.resolve('./views/home.ejs'), {
+                                error: error
+                        });
+                }
+        })
+
+        
 }

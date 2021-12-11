@@ -4,15 +4,18 @@
         <div class="container">
                 <a class="navbar-brand" href="/">Online Document Tracking System</a>
                 <div class="ml-auto row align-items-center">
-                        <div class="col-10"><a class="btn btn-primary ml-auto" href="/dashboard/<%= user.id %>/create-new-doc">Create New Document</a></div>
-                        <div class="col-2">
-                                <a href="#" onclick="hideUnhide('profilecard')">
-                                        <% if (user.profilePic == '') { %>
-                                                <img src="/images/no-user.png" alt="No Profile Picture" class="rounded-circle">
-                                        <% }else{ %>
-                                                <img src="/images/<%= user.profilePic %>" alt = "Profile Picture" class="rounded-circle">
-                                        <% } %>
-                                </a></div>
+                        <% if (!user.firstTime) { %>
+                                <div class="col-10"><a class="btn btn-primary ml-auto" href="/dashboard/<%= user.id %>/create-new-doc">Create New Document</a></div>
+                                <div class="col-2">
+                                        <a href="#" onclick="hideUnhide('profilecard')">
+                                                <% if (user.profilePic == '') { %>
+                                                        <img src="/images/no-user.png" alt="No Profile Picture" class="rounded-circle">
+                                                <% }else{ %>
+                                                        <img src="/images/<%= user.profilePic %>" alt = "Profile Picture" class="rounded-circle">
+                                                <% } %>
+                                        </a>
+                                </div>
+                        <% } %>
                 </div>
         </div>
 </nav>
