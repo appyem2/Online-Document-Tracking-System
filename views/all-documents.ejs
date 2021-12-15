@@ -10,7 +10,7 @@
                                 <div class="row justify-content-center">
                                         <div class="col-10">
                                                 <h2>All Documents</h2><hr>
-                                                <% if (user.documents.all.length == 0) { %>
+                                                <% if (user.all.length == 0) { %>
                                                         <h5>We do not have any documents to show you currently</h5>
                                                         <p></p>
                                                         <div class="col-10">
@@ -29,14 +29,14 @@
                                         </div>
                                 </div>
 
-                                <% if (user.documents.all.length) { %>
+                                <% if (user.all.length) { %>
                                         <div class="row justify-content-around">
                                                 <div class="col-10"></div>
                                         </div>
                                         
                                         <div class="row justify-content-center">
-                                                <div class="col-10">
-                                                        <table class="table table-striped">
+                                                <div class="col-10 mt-3 mb-3">
+                                                        <table class="table table-striped table-bordered">
                                                                 <thead class="thead-light">
                                                                         <tr>
                                                                                 <th scope="col">Document ID</th>
@@ -48,6 +48,16 @@
                                                                         </tr>
                                                                 </thead>
                                                                 <tbody>
+                                                                        <% docs.forEach(doc => { %>
+                                                                                <tr>
+                                                                                        <td><%= doc._id %> </td>
+                                                                                        <td><%= doc.subject %></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                </tr>
+                                                                        <% }) %>
                                                                 </tbody>
                                                         </table>
                                                 </div>

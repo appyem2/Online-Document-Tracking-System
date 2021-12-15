@@ -12,14 +12,13 @@ const userSchema = new mongoose.Schema({
         department: String,
         designation: String,
         profilePic: String,
-        documents: {
-                pending: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Document' }],
-                forwarded: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Document' }],
-                drafts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Document' }],
-                authored: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Document' }],
-                resolved: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Document' }],
-                all: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Document' }]
-        }
+        pending: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Document' }],
+        forwarded: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Document' }],
+        drafts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Document' }],
+        authored: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Document' }],
+        resolved: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Document' }],
+        all: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Document' }]
+
 });
 
 const User = new mongoose.model('User', userSchema);

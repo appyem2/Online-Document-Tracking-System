@@ -1,5 +1,6 @@
 import path from 'path';
 import User from '../models/user.js';
+import Document from '../models/document.js';   
 
 // controller function to render "First Time Login Page"
 export const getSignInFirstTime = function(req, res){
@@ -27,9 +28,16 @@ export const getDashboard = function(req, res){
                 if(err) return handleError(err);
 
                 if(user){
-                        res.render(path.resolve('./views/dashboard.ejs'), {
-                                user: user, 
-                        });
+
+
+                        Document.find({_id: { $in:  user.pending }}, function(findErr, docs){
+                                if(findErr) return handleError(findErr);
+                                res.render(path.resolve('./views/dashboard.ejs'), {
+                                        user: user, 
+                                        docs: docs
+                                });
+                        })
+                        
                 }
         })
 }
@@ -43,9 +51,14 @@ export const getPending = function(req, res){
                 if(err) return handleError(err);
 
                 if(user){
-                        res.render(path.resolve('./views/pending.ejs'), {
-                                user: user, 
-                        });
+
+                        Document.find({_id: { $in:  user.pending }}, function(findErr, docs){
+                                if(findErr) return handleError(findErr);
+                                res.render(path.resolve('./views/pending.ejs'), {
+                                        user: user, 
+                                        docs: docs
+                                });
+                        })
                 }
         })
 }
@@ -59,9 +72,14 @@ export const getForwarded = function(req, res){
                 if(err) return handleError(err);
 
                 if(user){
-                        res.render(path.resolve('./views/forwarded.ejs'), {
-                                user: user, 
-                        });
+
+                        Document.find({_id: { $in:  user.forwarded }}, function(findErr, docs){
+                                if(findErr) return handleError(findErr);
+                                res.render(path.resolve('./views/forwarded.ejs'), {
+                                        user: user, 
+                                        docs: docs
+                                });
+                        })
                 }
         })
 }
@@ -75,9 +93,13 @@ export const getDrafts = function(req, res){
                 if(err) return handleError(err);
 
                 if(user){
-                        res.render(path.resolve('./views/drafts.ejs'), {
-                                user: user, 
-                        });
+                        Document.find({_id: { $in:  user.drafts }}, function(findErr, docs){
+                                if(findErr) return handleError(findErr);
+                                res.render(path.resolve('./views/drafts.ejs'), {
+                                        user: user, 
+                                        docs: docs
+                                });
+                        })
                 }
         })
 }
@@ -91,9 +113,13 @@ export const getAuthored = function(req, res){
                 if(err) return handleError(err);
 
                 if(user){
-                        res.render(path.resolve('./views/authored.ejs'), {
-                                user: user, 
-                        });
+                        Document.find({_id: { $in:  user.authored }}, function(findErr, docs){
+                                if(findErr) return handleError(findErr);
+                                res.render(path.resolve('./views/authored.ejs'), {
+                                        user: user, 
+                                        docs: docs
+                                });
+                        })
                 }
         })
 }
@@ -107,9 +133,13 @@ export const getResolved = function(req, res){
                 if(err) return handleError(err);
 
                 if(user){
-                        res.render(path.resolve('./views/resolved.ejs'), {
-                                user: user, 
-                        });
+                        Document.find({_id: { $in:  user.resolved }}, function(findErr, docs){
+                                if(findErr) return handleError(findErr);
+                                res.render(path.resolve('./views/resolved.ejs'), {
+                                        user: user, 
+                                        docs: docs
+                                });
+                        })
                 }
         })
 }
@@ -123,9 +153,13 @@ export const getAllDocuments = function(req, res){
                 if(err) return handleError(err);
 
                 if(user){
-                        res.render(path.resolve('./views/all-documents.ejs'), {
-                                user: user, 
-                        });
+                        Document.find({_id: { $in:  user.all }}, function(findErr, docs){
+                                if(findErr) return handleError(findErr);
+                                res.render(path.resolve('./views/all-documents.ejs'), {
+                                        user: user, 
+                                        docs: docs
+                                });
+                        })
                 }
         })
 }
@@ -251,26 +285,54 @@ export const createNewDocument = function(req, res){
         const data = req.body;
         const userID = req.params.userID;
 
-        // User.findById(userID, (err, user) => {
-        //         if(err) return handleError(err);
 
-        //         if(user){
-        //                 const newDocument = new Document({
-        //                         subject: data.subject,
-        //                         author: userID,
-        //                         userChain: [userID, data.recipient],
-        //                 });
+        User.findById(userID, (err, user) => {
+                if(err) return handleError(err);
 
-        //                 // Handle if "Save for Later Chosen"
-        //                 if(data["Save"] == "Save"){
+                if(user){
 
-        //                 }
-        //                 // Handle if "Send Now"
-        //                 else if(data["Send"] == "Send"){
+                        // If the user chooses "Text Entry"
+                        if(data.uploadType === '1'){
 
-        //                 }
-        //         }
-        // })
+                                // Create the new document
+                                const newDocument = new Document({
+                                        subject: data.subject,
+                                        author: userID,
+                                        documentBody: [{
+                                                from: userID,
+                                                to: data.recipient,
+                                                content: data["input-text"],
+                                        }],
+                                });
+
+                                // Save the new document
+                                newDocument.save();
+
+                                // Add the document to the user list
+                                User.findByIdAndUpdate(user.id, 
+                                { 
+                                        $push:{ 
+                                                forwarded: newDocument._id , 
+                                                authored: newDocument._id,
+                                                all: newDocument._id
+                                        },
+                                }, function(updateErr, updatedUser){
+                                        if(updateErr) return handleError(updateErr);
+                                        User.findByIdAndUpdate(data.recipient,
+                                        { 
+                                                $push: {
+                                                        pending: newDocument._id,
+                                                        all: newDocument._id
+                                                }
+                                        }, function(updateErr2, updatedUser2){
+                                                res.redirect("/dashboard/"+ user._id+"/authored");
+                                        })
+                                })
+
+                        }
+                        
+                }
+        })
 
 
 }

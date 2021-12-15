@@ -7,7 +7,18 @@ const documentSchema = new mongoose.Schema({
         },
         author: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
         subject: String,
-        userChain: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+        documentBody: [{
+                from:{
+                        type: mongoose.Schema.Types.ObjectId, ref: 'User'
+                },
+                to:{
+                        type: mongoose.Schema.Types.ObjectId, ref: 'User'
+                },
+                content: String,
+                addedOn: {
+                        type: Date, default: new Date()
+                }
+        }],
 });
 
 const Document = new mongoose.model('Document', documentSchema);

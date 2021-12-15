@@ -10,7 +10,7 @@
                                 <div class="row justify-content-center">
                                         <div class="col-10">
                                                 <h2>Forwarded Documents</h1><hr>
-                                                <% if (user.documents.forwarded.length > 0) { %>
+                                                <% if (user.forwarded.length > 0) { %>
                                                         <h5>These are the documents you have already forwarded</h5>
                                                 <% } else { %>
                                                         <h5>You are yet to forward your first document</h5>
@@ -30,10 +30,10 @@
                                         </div>
                                 </div>
                                 
-                                <% if (user.documents.forwarded.length > 0){ %>
+                                <% if (user.forwarded.length > 0){ %>
                                         <div class="row justify-content-center">
-                                                <div class="col-10">
-                                                        <table class="table table-striped">
+                                                <div class="col-10 mt-3 mb-3">
+                                                        <table class="table table-striped table-bordered">
                                                                 <thead class="thead-light">
                                                                         <tr>
                                                                                 <th scope="col">Document ID</th>
@@ -44,6 +44,15 @@
                                                                         </tr>
                                                                 </thead>
                                                                 <tbody>
+                                                                        <% docs.forEach(doc => { %>
+                                                                                <tr>
+                                                                                        <td><%= doc._id %> </td>
+                                                                                        <td><%= doc.subject %> </td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                </tr>
+                                                                        <% }) %>
                                                                 </tbody>
                                                         </table>
                                                 </div>

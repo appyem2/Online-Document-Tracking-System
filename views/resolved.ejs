@@ -9,7 +9,7 @@
                                 <div class="row justify-content-center">
                                         <div class="col-10">
                                                 <h2>Resolved Documents</h1><hr> 
-                                                <% if (user.documents.resolved.length) { %>
+                                                <% if (user.resolved.length) { %>
                                                         <h5>These are the resolved/inactive documents</h5>
                                                 <% } else { %>
                                                         <h5>None of your documents got resolved recently!</h5>
@@ -28,10 +28,10 @@
                                         </div>
                                 </div>
                                 
-                                <% if (user.documents.resolved.length) { %>
+                                <% if (user.resolved.length) { %>
                                         <div class="row justify-content-center">
-                                                <div class="col-10">
-                                                        <table class="table table-striped">
+                                                <div class="col-10 mt-3 mb-3">
+                                                        <table class="table table-striped table-bordered">
                                                                 <thead class="thead-light">
                                                                         <tr>
                                                                                 <th scope="col">Document ID</th>
@@ -41,6 +41,14 @@
                                                                         </tr>
                                                                 </thead>
                                                                 <tbody>
+                                                                        <% docs.forEach(doc=> { %>
+                                                                                <tr>
+                                                                                        <td><%= doc._id %> </td>
+                                                                                        <td><%= doc.subject %> </td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                </tr>
+                                                                        <% }) %>
                                                                 </tbody>
                                                         </table>
                                                 </div>
