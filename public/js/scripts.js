@@ -34,3 +34,17 @@ function chooseUploadType(){
 
 }
 
+function validateEditPasswordForm(){
+        
+        const password = document.getElementById("password");
+        const confirmPassword = document.getElementById("confirmPassword");
+
+        console.log(password.value, confirmPassword.value);
+        if(password.value != confirmPassword.value){
+                alert("Error: Password and Confirm Password does not match");     
+                return false;  
+        }else{
+                return true;
+        }
+}
+

@@ -150,6 +150,40 @@ export const getCreateNewDoc = function(req, res){
         })
 }
 
+// controller function to render "Edit Profile"
+export const getEditProfile = function (req, res){
+        const userID = req.params.userID;
+        
+        User.findById(userID, (err, user) => {
+                
+                if(err) return handleError(err);
+
+                if(user){
+                        res.render(path.resolve('./views/edit-profile.ejs'), {
+                                user: user, 
+                        });
+                }
+        })
+}
+
+// controller function to render "Edit Password"
+export const getEditPassword = function (req, res){
+        const userID = req.params.userID;
+        
+        User.findById(userID, (err, user) => {
+                
+                if(err) return handleError(err);
+
+                if(user){
+                        res.render(path.resolve('./views/edit-password.ejs'), {
+                                user: user, 
+                        });
+                }
+        })
+}
+
+
+
 // controller function to handle "Edit Profile" request
 export const postEditProfile = function(req, res){
         const data = req.body;
@@ -173,11 +207,18 @@ export const postEditProfile = function(req, res){
                                 }, 
                                 (updateErr, updatedUser) => {
                                 if(updateErr) return handleError(updateErr);
+                                
+                                if(updatedUser.firstTime){
+                                        res.render(path.resolve('./views/initial-setup.ejs'),{
+                                                user: updatedUser,
+                                                step: 2
+                                        })
+                                } else{
+                                        res.render(path.resolve('./views/dashboard.ejs'),{
+                                                user: updatedUser,
+                                        })
+                                }
 
-                                res.render(path.resolve('./views/initial-setup.ejs'),{
-                                        user: updatedUser,
-                                        step: 2
-                                })
                         })
                 }
         })

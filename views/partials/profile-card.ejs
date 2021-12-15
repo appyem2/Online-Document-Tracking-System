@@ -9,8 +9,8 @@
                 <h6 class="card-subtitle mb-2 text-muted"><%= user.designation %></h6>
                 <p class="card-subtitle mb-2 text-muted">Dept. of <%= user.department %></h6>
                 <ul class="list-group list-group-flush">
-                        <li class="list-group-item">View Profile</li>
-                        <li class="list-group-item">Change Password</li>
+                        <li class="list-group-item"><a href="/dashboard/<%= user._id %>/edit-profile">Edit Profile</a></li>
+                        <li class="list-group-item"><a href="/dashboard/<%= user._id %>/edit-password">Change Password</a></li>
                         <li class="list-group-item"><a href="/">Sign Out</a></li>
                 </ul>
         </div>
