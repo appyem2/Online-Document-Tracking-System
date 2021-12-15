@@ -113,7 +113,7 @@ export const getAuthored = function(req, res){
                 if(err) return handleError(err);
 
                 if(user){
-                        Document.find({_id: { $in:  user.authored }}, function(findErr, docs){
+                        Document.find({_id: { $in:  user.authored }}).sort({createdOn: "desc"}).exec(function(findErr, docs){
                                 if(findErr) return handleError(findErr);
                                 res.render(path.resolve('./views/authored.ejs'), {
                                         user: user, 
@@ -133,8 +133,9 @@ export const getResolved = function(req, res){
                 if(err) return handleError(err);
 
                 if(user){
-                        Document.find({_id: { $in:  user.resolved }}, function(findErr, docs){
+                        Document.find({_id: { $in:  user.resolved }}).exec(function(findErr, docs){
                                 if(findErr) return handleError(findErr);
+
                                 res.render(path.resolve('./views/resolved.ejs'), {
                                         user: user, 
                                         docs: docs
@@ -155,6 +156,7 @@ export const getAllDocuments = function(req, res){
                 if(user){
                         Document.find({_id: { $in:  user.all }}, function(findErr, docs){
                                 if(findErr) return handleError(findErr);
+
                                 res.render(path.resolve('./views/all-documents.ejs'), {
                                         user: user, 
                                         docs: docs
