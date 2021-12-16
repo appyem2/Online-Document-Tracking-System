@@ -115,6 +115,8 @@ export const getAuthored = function(req, res){
                 if(user){
                         Document.find({_id: { $in:  user.authored }}).sort({createdOn: "desc"}).exec(function(findErr, docs){
                                 if(findErr) return handleError(findErr);
+
+
                                 res.render(path.resolve('./views/authored.ejs'), {
                                         user: user, 
                                         docs: docs
@@ -217,7 +219,6 @@ export const getEditPassword = function (req, res){
                 }
         })
 }
-
 
 
 // controller function to handle "Edit Profile" request

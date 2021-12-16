@@ -32,8 +32,8 @@
                                 <% if (user.authored.length > 0) { %>
                                         <div class="row justify-content-center">
                                                 <div class="col-10 mt-3 mb-3">
-                                                        <table class="table table-striped table-bordered">
-                                                                <thead class="thead-light">
+                                                        <table class="table table-hover">
+                                                                <thead class="table-primary">
                                                                         <tr>
                                                                                 <th scope="col">Document ID</th>
                                                                                 <th scope="col">Document Subject</th>
@@ -47,7 +47,7 @@
                                                                                 <tr>
                                                                                         <td><%= doc._id %> </td>
                                                                                         <td><%= doc.subject %> </td>
-                                                                                        <td><%= doc.createdOn %></td>
+                                                                                        <td><%= doc.createdOn.toString().substring(4, 25) %></td>
                                                                                         <td></td>
                                                                                         <td></td>
                                                                                 </tr>

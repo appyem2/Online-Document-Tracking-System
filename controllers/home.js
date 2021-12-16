@@ -6,8 +6,8 @@ export const getHome = function(req, res){
 
         // Manually adding an user to the list of users
         // const user = new User({
-        //         email: "510818032.aparajita@students.iiests.ac.in",
-        //         password: "510818032",
+        //         email: "510818009.souradip@students.iiests.ac.in",
+        //         password: "510818009",
         //         firstTime: true,
         //         prefix: "",
         //         firstName: "",
