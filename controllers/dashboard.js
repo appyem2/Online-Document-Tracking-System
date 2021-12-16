@@ -13,7 +13,6 @@ export const getSignInFirstTime = function(req, res){
                 if(user){
                         res.render(path.resolve('./views/initial-setup.ejs'), {
                                 user: user, 
-                                step: 1
                         });
                 }
         })

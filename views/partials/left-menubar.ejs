@@ -5,6 +5,7 @@
         </div>
         <div class="row text-center mt-2">
         <div class="col-12">
+                <p><a href="/dashboard/<%= user.id %>/create-new-doc" class="<%= active === 'create-new-doc' ? 'text-bold':'' %> ">Create New Document</a></p>
                 <p><a href="/dashboard/<%= user.id %>/pending" class="<%= active === 'pending' ? 'text-bold':'' %> ">Pending</a></p>
                 <p><a href="/dashboard/<%= user.id %>/forwarded" class="<%= active === 'forwarded' ? 'text-bold':'' %> ">Forwarded</a></p>
                 <p><a href="/dashboard/<%= user.id %>/drafts" class="<%= active === 'drafts' ? 'text-bold':'' %> ">Drafts</a></p>

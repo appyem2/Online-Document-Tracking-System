@@ -1,33 +1,16 @@
 <%- include('./partials/header', {user: user}) %> 
 <div class="container">
-        <% if (step == 1) { %>
-                <div class="row  mb-3 mt-3 text-center">
-                        <div class="col-12 col-md-8 offset-md-2">
-                                <h2>Signing in for the first time?</h2>
-                                <p>Hey, new user! Before you access your documents dashboard, please fill in the following details to let us know you better.</p>
-                                <hr>
-                        </div>
+        <div class="row  mb-3 mt-3 text-center">
+                <div class="col-12 col-md-8 offset-md-2">
+                        <h2>Signing in for the first time?</h2>
+                        <p>Hey, new user! We value your security. Before you access your documents dashboard, please change your account password with a new one.</p>
+                        <hr>
                 </div>
-                <div class="row">
-                        <div class="col-12 col-md-8 offset-md-2">
-                                <%- include('./partials/edit-profile-form', {user: user}) %>
-                        </div>
+        </div>
+        <div class="row">
+                <div class="col-12 col-md-8 offset-md-2">
+                        <%- include('./partials/edit-password-form', {user: user}) %>
                 </div>
-        <% } %>
-        
-        <% if (step == 2) { %>
-                <div class="row  mb-3 mt-3 text-center">
-                        <div class="col-12 col-md-8 offset-md-2">
-                                <h2>Change Password</h2>
-                                <p>Hey, new user! We value your security. Please change your account password with a new one.</p>
-                                <hr>
-                        </div>
-                </div>
-                <div class="row">
-                        <div class="col-12 col-md-8 offset-md-2">
-                                <%- include('./partials/edit-password-form', {user: user}) %>
-                        </div>
-                </div>
-        <% } %>
+        </div>
         
 </div>

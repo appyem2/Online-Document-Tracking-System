@@ -41,7 +41,7 @@
                                                                                 <th scope="col">Document ID</th>
                                                                                 <th scope="col">Document Subject</th>
                                                                                 <th scope="col">Date Received</th>
-                                                                                <th scope="col">Received From</th>
+                                                                                <!-- <th scope="col">Received From</th> -->
                                                                         </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -49,8 +49,8 @@
                                                                                 <tr>
                                                                                         <td><%= doc._id %> </td>
                                                                                         <td><%= doc.subject %> </td>
-                                                                                        <td></td>
-                                                                                        <td></td>
+                                                                                        <td><%= doc.createdOn.toString().substring(4, 25) %></td>
+                                                                                        <!-- <td></td> -->
                                                                                 </tr>
                                                                         <% }) %>
                                                                 </tbody>
