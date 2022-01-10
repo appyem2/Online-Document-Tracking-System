@@ -93,3 +93,13 @@ export const postLogin = function(req, res){
 
         
 }
+
+// controller function to handle "Admin Login" Request
+export const postAdminLogin = function(req, res) {
+        
+        const password = req.body.password;
+
+        //  Admin Password Verification Code Goes here
+
+        res.redirect("/admin/add-new-user");
+}
