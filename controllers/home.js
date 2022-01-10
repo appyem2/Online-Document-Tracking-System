@@ -31,6 +31,12 @@ export const getHome = function(req, res){
         });
 }
 
+export const getAdminLogin = function (req, res) {
+        res.render(path.resolve('./views/admin-login'), {
+                error: undefined,
+        })
+}
+
 // controller function to render "Forgot Password Page 1"
 export const getForgotPassword1 = function(req, res){
         res.render(path.resolve('./views/forgot-pwd-1.ejs'));
