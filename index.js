@@ -14,6 +14,7 @@ const __dirname = path.dirname(__filename);
 // Import Routes
 import homeRoutes from './routes/home.js';
 import dashboardRoutes from './routes/dashboard.js';
+import adminRoutes from './routes/admin.js';
 
 // Initialize and set the express app
 const app = express();
@@ -26,6 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Setup the routes
 app.use('/', homeRoutes);
 app.use("/dashboard/", dashboardRoutes);
+app.use("/admin/", adminRoutes);
 
 // Listen to Port 3000
 const port = process.env.PORT || 8080;
