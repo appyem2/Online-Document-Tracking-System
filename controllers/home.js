@@ -70,7 +70,7 @@ export const postLogin = function(req, res){
                         error = "Login Error: Email ID is not registered";      // User does not exist
                 }else{
                         const user = users[0];
-                        console.log(user);
+                        
                         if(user.password != password){
                                 error = "Login Error: Password is incorrect";   // Password Mismatch
                         }else{

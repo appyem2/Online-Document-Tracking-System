@@ -219,6 +219,47 @@ export const getEditPassword = function (req, res){
         })
 }
 
+// controller function to render "Document Bodies"
+export const getDocBodies = function (req, res){
+        const userID = req.params.userID;
+        const docID = req.params.docID;
+
+        User.findById(userID, (err, user) => {
+
+                if(err) return handleError(err);
+
+                if(user){
+                        Document.findById(docID, (err2, doc) => {
+                                if(err2) return handleError(err2);
+
+                                doc.documentBody.forEach(docBody =>{
+                                        User.findById(docBody.from, (err3, fromUser)=>{
+                                                docBody.from = fromUser;
+
+                                                
+                                                User.findById(docBody.to, (err4, toUser)=>{
+                                                        docBody.to = toUser;
+
+                                                        if(user.all.includes(docID)){
+                                                                res.render(path.resolve('./views/document.ejs'), {
+                                                                        document: doc,
+                                                                        user: user,
+                                                                });        
+                                                        }else{
+                                                                res.render(path.resolve('./views/permission-denied.ejs'), {
+                                                                        user:user
+                                                                })
+                                                        }
+                                                        
+                                                })
+                                        });
+                                })
+                                
+                        })
+                }
+        })
+}
+
 
 // controller function to handle "Edit Profile" request
 export const postEditProfile = function(req, res){
@@ -296,7 +337,7 @@ export const createNewDocument = function(req, res){
                         // If the user chooses "Text Entry"
                         if(data.uploadType === '1'){
 
-                                // Create the new document
+                                // Create the new document      
                                 const newDocument = new Document({
                                         subject: data.subject,
                                         author: userID,
@@ -310,27 +351,49 @@ export const createNewDocument = function(req, res){
                                 // Save the new document
                                 newDocument.save();
 
-                                // Add the document to the user list
-                                User.findByIdAndUpdate(user.id, 
-                                { 
-                                        $push:{ 
-                                                forwarded: newDocument._id , 
-                                                authored: newDocument._id,
-                                                all: newDocument._id
-                                        },
-                                }, function(updateErr, updatedUser){
-                                        if(updateErr) return handleError(updateErr);
-                                        User.findByIdAndUpdate(data.recipient,
+                                
+                                // If they opt to SEND NOW
+                                if(data.send === "send"){
+                                        // Add the document to the user list
+                                        User.findByIdAndUpdate(user.id, 
                                         { 
-                                                $push: {
-                                                        pending: newDocument._id,
+                                                $push:{ 
+                                                        forwarded: newDocument._id , 
+                                                        authored: newDocument._id,
                                                         all: newDocument._id
-                                                }
-                                        }, function(updateErr2, updatedUser2){
-                                                res.redirect("/dashboard/"+ user._id+"/authored");
+                                                },
+                                        }, function(updateErr, updatedUser){
+                                                if(updateErr) return handleError(updateErr);
+                                                User.findByIdAndUpdate(data.recipient,
+                                                { 
+                                                        $push: {
+                                                                pending: newDocument._id,
+                                                                all: newDocument._id
+                                                        }
+                                                }, function(updateErr2, updatedUser2){
+                                                        if(updateErr2) return handleError(updateErr2);
+                                                        res.redirect("/dashboard/"+ user._id+"/authored");
+                                                })
                                         })
-                                })
 
+                                }
+                                // If they opt to SAVE LATER
+                                else if(data.save === "save"){
+                                        // Add the document to the user list
+                                        User.findByIdAndUpdate(user.id, 
+                                        { 
+                                                $push:{ 
+                                                        drafts: newDocument._id , 
+                                                        all: newDocument._id
+                                                },
+                                        }, function(updateErr, updatedUser){
+                                                if(updateErr) return handleError(updateErr);
+                                                res.redirect("/dashboard/"+ user._id+"/drafts");        
+                                        })
+
+                                }
+
+                                
                         }
                         
                 }

@@ -1,0 +1,22 @@
+<%- include('./partials/header', {user: user}) %>
+<div class="container-fluid">
+        <div class="row">
+                <%- include('./partials/left-menubar', {active: 'document', user: user})  %>  
+                <%- include('./partials/profile-card', {user: user}) %>
+                
+                <!-- Main Content-->
+                <div class="col-10 offset-2">
+                        <div class="container mt-5">
+                                <div class="row justify-content-center">
+                                        <div class="col-10">
+                                                <h2>You do not have permission to view this document</h2>
+                                                <hr>
+                                        </div>
+                                </div>
+                                
+                        </div>
+                </div>
+        </div>
+</div>
+
+<%- include('./partials/foot') %>

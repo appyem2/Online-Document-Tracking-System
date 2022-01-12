@@ -1,0 +1,54 @@
+<%- include('./partials/header', {user: user}) %>
+<div class="container-fluid">
+        <div class="row">
+                <%- include('./partials/left-menubar', {active: 'document', user: user})  %>  
+                <%- include('./partials/profile-card', {user: user}) %>
+                
+                <!-- Main Content-->
+                <div class="col-10 offset-2">
+                        <div class="container mt-5">
+                                <div class="row justify-content-center">
+                                        <div class="col-10">
+                                                <h2><%= document.subject %></h2>
+                                                <h5 class="text-muted">Document ID: <%= document._id %> </h5>
+                                                <hr>
+                                        </div>
+                                        <div class="col-10">
+
+                                                <% document.documentBody.slice().reverse().forEach(docBody => { %>
+                                                        <div class="card">
+                                                                <div class="card-body">
+                                                                        <div class="row">
+                                                                                <div class="col-8">
+                                                                                        <p>
+                                                                                                <strong><%= docBody.from.prefix %> <%= docBody.from.firstName %> <%= docBody.from.middleName %> <%= docBody.from.lastName %></strong> <small><<%= docBody.from.email %>></small>
+                                                                                                <br>
+                                                                                                <small class="text-muted">to <%= docBody.to.prefix %> <%= docBody.to.firstName %> <%= docBody.to.middleName %> <%= docBody.to.lastName %> <<%= docBody.to.email %>> </small>
+                                                                                        </p>        
+                                                                                </div>
+                                                                                <div class="col-4">
+                                                                                        <small class="text-muted float-end"><em><%= docBody.addedOn.toString().substring(4, 25) %></em></small>
+                                                                                </div>
+                                                                                
+                                                                        </div>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                        <div class="col-12">
+                                                                                <%- docBody.content %>
+                                                                        </div>
+                                                                </div>
+                                                                <div class="card-footer">
+                                                                        
+                                                                </div>
+                                                        </div>
+                                                <% }) %>
+
+                                        </div>
+                                </div>
+                                
+                        </div>
+                </div>
+        </div>
+</div>
+
+<%- include('./partials/foot') %>

@@ -43,7 +43,7 @@
                                                                 <tbody>
                                                                         <% docs.forEach(doc=> { %>
                                                                                 <tr>
-                                                                                        <td><%= doc._id %> </td>
+                                                                                        <td><a href="/dashboard/<%= user._id %>/<%= doc._id %>"><%= doc._id %></a> </td>
                                                                                         <td><%= doc.subject %> </td>
                                                                                         <td></td>
                                                                                         <td></td>
