@@ -101,5 +101,5 @@ export const postAdminLogin = function(req, res) {
 
         //  Admin Password Verification Code Goes here
 
-        res.redirect("/admin/add-new-user");
+        res.redirect("/admin/");
 }
