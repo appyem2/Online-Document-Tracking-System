@@ -99,7 +99,7 @@ export const postAdminLogin = function(req, res) {
         
         const password = req.body.password;
 
-        //  Admin Password Verification Code Goes here
+        //  TODO: Admin Password Verification Code Goes here
 
         res.redirect("/admin/");
 }

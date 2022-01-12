@@ -334,67 +334,71 @@ export const createNewDocument = function(req, res){
 
                 if(user){
 
+                        var content = "";
+
                         // If the user chooses "Text Entry"
-                        if(data.uploadType === '1'){
+                        if(data.uploadType === '1'){content = data["input-text"];}
+                        // If the user chooses "Hard Copy"
+                        else if(data.uploadType === '3'){content = data["input-text-default"]}
+                
+                        // Create the new document      
+                        const newDocument = new Document({
+                                subject: data.subject,
+                                author: userID,
+                                documentBody: [{
+                                        from: userID,
+                                        to: data.recipient,
+                                        content: content,
+                                }],
+                        });
 
-                                // Create the new document      
-                                const newDocument = new Document({
-                                        subject: data.subject,
-                                        author: userID,
-                                        documentBody: [{
-                                                from: userID,
-                                                to: data.recipient,
-                                                content: data["input-text"],
-                                        }],
-                                });
+                        // Save the new document
+                        newDocument.save();
 
-                                // Save the new document
-                                newDocument.save();
-
-                                
-                                // If they opt to SEND NOW
-                                if(data.send === "send"){
-                                        // Add the document to the user list
-                                        User.findByIdAndUpdate(user.id, 
+                        
+                        // If they opt to SEND NOW
+                        if(data.send === "send"){
+                                // Add the document to the user list
+                                User.findByIdAndUpdate(user.id, 
+                                { 
+                                        $push:{ 
+                                                forwarded: newDocument._id , 
+                                                authored: newDocument._id,
+                                                all: newDocument._id
+                                        },
+                                }, function(updateErr, updatedUser){
+                                        if(updateErr) return handleError(updateErr);
+                                        User.findByIdAndUpdate(data.recipient,
                                         { 
-                                                $push:{ 
-                                                        forwarded: newDocument._id , 
-                                                        authored: newDocument._id,
+                                                $push: {
+                                                        pending: newDocument._id,
                                                         all: newDocument._id
-                                                },
-                                        }, function(updateErr, updatedUser){
-                                                if(updateErr) return handleError(updateErr);
-                                                User.findByIdAndUpdate(data.recipient,
-                                                { 
-                                                        $push: {
-                                                                pending: newDocument._id,
-                                                                all: newDocument._id
-                                                        }
-                                                }, function(updateErr2, updatedUser2){
-                                                        if(updateErr2) return handleError(updateErr2);
-                                                        res.redirect("/dashboard/"+ user._id+"/authored");
-                                                })
+                                                }
+                                        }, function(updateErr2, updatedUser2){
+                                                if(updateErr2) return handleError(updateErr2);
+                                                res.redirect("/dashboard/"+ user._id+"/authored");
                                         })
+                                })
 
-                                }
-                                // If they opt to SAVE LATER
-                                else if(data.save === "save"){
-                                        // Add the document to the user list
-                                        User.findByIdAndUpdate(user.id, 
-                                        { 
-                                                $push:{ 
-                                                        drafts: newDocument._id , 
-                                                        all: newDocument._id
-                                                },
-                                        }, function(updateErr, updatedUser){
-                                                if(updateErr) return handleError(updateErr);
-                                                res.redirect("/dashboard/"+ user._id+"/drafts");        
-                                        })
-
-                                }
-
-                                
                         }
+                        // If they opt to SAVE LATER
+                        else if(data.save === "save"){
+                                // Add the document to the user list
+                                User.findByIdAndUpdate(user.id, 
+                                { 
+                                        $push:{ 
+                                                drafts: newDocument._id , 
+                                                all: newDocument._id
+                                        },
+                                }, function(updateErr, updatedUser){
+                                        if(updateErr) return handleError(updateErr);
+                                        res.redirect("/dashboard/"+ user._id+"/drafts");        
+                                })
+
+                        }
+
+                        
+                        
                         
                 }
         })
