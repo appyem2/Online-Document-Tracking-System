@@ -187,6 +187,7 @@ export const getCreateNewDoc = function(req, res){
         })
 }
 
+
 // controller function to render "Edit Profile"
 export const getEditProfile = function (req, res){
         const userID = req.params.userID;
@@ -220,7 +221,7 @@ export const getEditPassword = function (req, res){
 }
 
 // controller function to render "Document Bodies"
-export const getDocBodies = function (req, res){
+export const  getDocBodies = function (req, res){
         const userID = req.params.userID;
         const docID = req.params.docID;
 
@@ -232,32 +233,52 @@ export const getDocBodies = function (req, res){
                         Document.findById(docID, (err2, doc) => {
                                 if(err2) return handleError(err2);
 
-                                doc.documentBody.forEach(docBody =>{
+                                doc.documentBody.forEach((docBody, index) =>{
+                                        
                                         User.findById(docBody.from, (err3, fromUser)=>{
                                                 docBody.from = fromUser;
 
                                                 
                                                 User.findById(docBody.to, (err4, toUser)=>{
                                                         docBody.to = toUser;
-
+                                                        
                                                         if(user.all.includes(docID)){
-                                                                res.render(path.resolve('./views/document.ejs'), {
-                                                                        document: doc,
-                                                                        user: user,
-                                                                });        
-                                                        }else{
+
+
+                                                                if(index === doc.documentBody.length -1){
+                                                                        
+                                                                        var lastUserInTheChain = docBody.to.email == user.email;
+                                                                        
+                                                                        User.find({_id: {$ne: userID}}, (findErr, users)=>{
+                                                                                
+                                                                                res.render(path.resolve('./views/document.ejs'), {
+                                                                                        document: doc,
+                                                                                        user: user,
+                                                                                        lastUser: lastUserInTheChain,
+                                                                                        users: users
+                                                                                });  
+                                                                        })   
+                                                                }
+   
+                                                        }
+                                                        
+                                                        else{
                                                                 res.render(path.resolve('./views/permission-denied.ejs'), {
                                                                         user:user
                                                                 })
                                                         }
                                                         
-                                                })
+                                                
+                                                });
                                         });
+                                        
                                 })
+
                                 
+                                                        
                         })
                 }
-        })
+        });
 }
 
 
@@ -396,6 +417,92 @@ export const createNewDocument = function(req, res){
                                 })
 
                         }
+
+                        
+                        
+                        
+                }
+        })
+
+
+}
+
+// controller function to hadle "Create New Document" request
+export const addComment = function(req, res){
+
+        const data = req.body;
+        const userID = req.params.userID;
+        const docID = req.params.docID;
+
+
+        User.findById(userID, (err, user) => {
+                if(err) return handleError(err);
+
+                if(user){
+
+                        var content = "";
+
+                        // If the user chooses "Text Entry"
+                        if(data.uploadType === '1'){content = data["input-text"];}
+                        // If the user chooses "Hard Copy"
+                        else if(data.uploadType === '3'){content = data["input-text-default"]}
+                
+                        // Create the new comment      
+                        const comment = {
+                                from: userID,
+                                to: data.recipient,
+                                content: content,
+                        }
+
+                        
+                        // If they opt to SEND NOW
+                        if(data.send === "send"){
+
+                                Document.findByIdAndUpdate(docID, {$push:{documentBody: comment}}, function(updateErr, doc){
+                                        if(updateErr) return handleError(updateErr);
+                                        
+                                        // Add the document to the user list
+                                        User.findByIdAndUpdate(user.id, 
+                                        { 
+                                                $push:{ 
+                                                        forwarded: doc._id 
+                                                },
+                                                $pull:{
+                                                        pending: doc._id
+                                                }
+                                        }, function(userUpdateErr, updatedUser){
+                                                if(userUpdateErr) return handleError(userUpdateErr);
+                                                User.findByIdAndUpdate(data.recipient,
+                                                { 
+                                                        $addToSet: {
+                                                                pending: doc._id,
+                                                                all: doc._id
+                                                        }
+                                                }, function(updateErr2, updatedUser2){
+                                                        if(updateErr2) return handleError(updateErr2);
+                                                        res.redirect("/dashboard/"+ user._id+"/forwarded");
+                                                })
+                                        })
+
+                                })
+                                
+
+                        }
+                        // If they opt to SAVE LATER
+                        // else if(data.save === "save"){
+                        //         // Add the document to the user list
+                        //         User.findByIdAndUpdate(user.id, 
+                        //         { 
+                        //                 $push:{ 
+                        //                         drafts: newDocument._id , 
+                        //                         all: newDocument._id
+                        //                 },
+                        //         }, function(updateErr, updatedUser){
+                        //                 if(updateErr) return handleError(updateErr);
+                        //                 res.redirect("/dashboard/"+ user._id+"/drafts");        
+                        //         })
+
+                        // }
 
                         
                         

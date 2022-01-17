@@ -8,15 +8,86 @@
                 <div class="col-10 offset-2">
                         <div class="container mt-5">
                                 <div class="row justify-content-center">
-                                        <div class="col-10">
+                                        <div class="col-6">
                                                 <h2><%= document.subject %></h2>
                                                 <h5 class="text-muted">Document ID: <%= document._id %> </h5>
+                                        </div>
+                                
+                                        <div class="col-2 align-self-center">
+                                                <% if (lastUser) { %>
+                                                        <button type="button" class="btn btn-outline-primary float-end" onclick="hideUnhide('comment-form')">Add Comment</a>
+                                                <% } %>
+                                        </div>
+                                        <div class="col-2 align-self-center">
+                                                <% if(lastUser) { %>
+                                                        <a type="button" class="btn btn-outline-secondary" href="/dashboard/<%= user._id %>/resolve/<%= document._id %>">Resolve</a>
+                                                <% } %>
+                                        </div>
+                                        <div class="col-10">
                                                 <hr>
                                         </div>
                                         <div class="col-10">
 
+                                                <!-- The Add Comment Form (Initially Hidden) -->
+                                                <div class="card mb-3 hide" id="comment-form">
+                                                        <div class="card-body">
+                                                                <form action="/dashboard/<%= user.id %>/add-comment/<%= document._id %>" method="post" autocomplete="off"> 
+                                                                
+                                                                <div class="form-group mt-2 row">
+                                                                        <div class="col-3 align-self-start">
+                                                                                <label class="form-label" for="recipient">Forward To <span class="text-danger">*</span></label>
+                                                                        </div>
+                                                                        <div class="col-9">
+                                                                                <select class="form-control" id="recipient" name="recipient" required>
+                                                                                        <option value="undefined">-- None --</option>
+                                                                                        <% users.forEach(userToSend => { %>
+                                                                                                <% if (userToSend.firstName !== "") { %>
+                                                                                                        <option value="<%= userToSend._id %>"><%= userToSend.prefix %> <%=userToSend.firstName%> <%=userToSend.middleName%> <%=userToSend.lastName%></option>
+                                                                                                <% } %>
+                                                                                        <% }) %>
+                                                                                </select>
+                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group mt-2 row">
+                                                                        <div class="col-3 align-self-start">
+                                                                                <label class="form-label" for="method">I will provide the comment by <span class="text-danger">*</span></label>
+                                                                        </div>
+                                                                        <div class="col-9 align-self-start">
+                                                                                <select class="form-control" id="method" name="uploadType" onchange="chooseUploadType()">
+                                                                                        <option value="1" selected>Text Entry</option>
+                                                                                        <option value="2">Document Upload</option>
+                                                                                        <option value="3">Hard Copy</option>
+                                                                                </select>
+                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group mt-2 row">
+                                                                        <div class="col-3 align-self-start">
+                                                                                <label class="form-label">Comment <span class="text-danger">*</span></label>
+                                                                        </div>
+                                                                        <div class="col-9 align-self-start"  id="text-entry-div">
+                                                                                <textarea name="input-text" class="form-control" id="text-entry"></textarea>
+                                                                        </div>
+                                                                        <div class="col-9 align-self-start hide" id="doc-upload-div">
+                                                                                <input name="input-file" type="file" class="form-control" id="doc-upload">
+                                                                                <small class="text-muted">The maximum file size is 4 MB and the preferred file format is PDF.</small>
+                                                                        </div>
+                                                                        <div class="col-9 align-self-start hide" id="hard-copy-div">
+                                                                                <input name="input-text-default" type="text" class="form-control" id="hard-copy" readonly value="The document will be sent in a hard copy ">
+                                                                        </div>                                                                        
+                                                                </div>
+                                                                <div class="form-group mt-3 mb-3 row justify-content-end">
+                                                                        <div class="col-9">
+                                                                                <button name="save" type="submit" class="btn btn-secondary" value="save">Save for Later</button>
+                                                                                <button name="send" type="submit" class="btn btn-primary" value="send">Send Now</button>
+                                                                        </div>
+                                                                </div>
+                                                        </form>
+                                                        </div>
+                                                </div>
+                                                
+                                                <!-- Document Bodies in a reverse chronological order -->
                                                 <% document.documentBody.slice().reverse().forEach(docBody => { %>
-                                                        <div class="card">
+                                                        <div class="card mt-2 mb-2">
                                                                 <div class="card-body">
                                                                         <div class="row">
                                                                                 <div class="col-8">
@@ -37,12 +108,11 @@
                                                                                 <%- docBody.content %>
                                                                         </div>
                                                                 </div>
-                                                                <div class="card-footer">
-                                                                        
-                                                                </div>
                                                         </div>
                                                 <% }) %>
-
+                                                
+                                                <!-- Dummy div to give lower padding -->
+                                                <div class="mt-5"></div>
                                         </div>
                                 </div>
                                 
@@ -50,5 +120,11 @@
                 </div>
         </div>
 </div>
-
+<!-- Initialize the editor. -->
+<script>
+  new FroalaEditor('textarea', {
+    // Set custom buttons.
+    toolbarButtons: [['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'formatOL', 'formatUL'], ['fontFamily', 'fontSize', 'textColor', 'backgroundColor'], ['undo', 'redo', 'fullscreen', 'print']]
+  });
+</script>
 <%- include('./partials/foot') %>
