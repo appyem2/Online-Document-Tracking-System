@@ -3,6 +3,7 @@ import User from '../models/user.js';
 import Document from '../models/document.js';   
 import formidable from 'formidable';
 import fs from 'fs';
+import { copyFileSync } from 'fs';
 
 
 // controller function to render "First Time Login Page"
@@ -391,71 +392,117 @@ export const createNewDocument = function(req, res){
 
                 if(user){
 
-                        var content = "";
-
-                        // If the user chooses "Text Entry"
-                        if(data.uploadType === '1'){content = data["input-text"];}
-                        // If the user chooses "Hard Copy"
-                        else if(data.uploadType === '3'){content = data["input-text-default"]}
-                
-                        // Create the new document      
-                        const newDocument = new Document({
-                                subject: data.subject,
-                                author: userID,
-                                documentBody: [{
-                                        from: userID,
-                                        to: data.recipient,
-                                        content: content,
-                                }],
-                        });
-
-                        // Save the new document
-                        newDocument.save();
-
+                        const form = new formidable.IncomingForm();
+                        const uploadFolder = path.resolve("./public/files");
+                        form.maxFileSize = 40*1024*1024; // 4 MB
+                        form.uploadDir = uploadFolder;
                         
-                        // If they opt to SEND NOW
-                        if(data.send === "send"){
-                                // Add the document to the user list
-                                User.findByIdAndUpdate(user.id, 
-                                { 
-                                        $push:{ 
-                                                forwarded: newDocument._id , 
-                                                authored: newDocument._id,
-                                                all: newDocument._id
-                                        },
-                                }, function(updateErr, updatedUser){
-                                        if(updateErr) return handleError(updateErr);
-                                        User.findByIdAndUpdate(data.recipient,
-                                        { 
-                                                $push: {
-                                                        pending: newDocument._id,
-                                                        all: newDocument._id
-                                                }
-                                        }, function(updateErr2, updatedUser2){
-                                                if(updateErr2) return handleError(updateErr2);
-                                                res.redirect("/dashboard/"+ user._id+"/authored");
+                        
+                        form.parse(req, async function(err, fields, files){
+                                
+                                var content = "";
+                                var contentType = "";
+                                const data = fields;
+
+                                console.log(files);
+
+                                // No file is uploaded
+                                if(files["input-file"]["size"] == 0){
+                                        // If the user chooses "Text Entry"
+                                        if(data.uploadType === '1'){content = data["input-text"]; contentType="text";}
+                                        // If the user chooses "Hard Copy"
+                                        else if(data.uploadType === '3'){content = data["input-text-default"]; contentType="text";}
+                                }
+
+                                // File size exceeds 4MB Size
+                                else if(files["input-file"]["size"] > 40*1024*1024){
+                                        return res.status(400).json({
+                                                status: "Fail",
+                                                message: "Upload Error: Maximum Size Limit Exceeded",
                                         })
-                                })
+                                }
 
-                        }
-                        // If they opt to SAVE LATER
-                        else if(data.save === "save"){
-                                // Add the document to the user list
-                                User.findByIdAndUpdate(user.id, 
-                                { 
-                                        $push:{ 
-                                                drafts: newDocument._id , 
-                                                all: newDocument._id
-                                        },
-                                }, function(updateErr, updatedUser){
-                                        if(updateErr) return handleError(updateErr);
-                                        res.redirect("/dashboard/"+ user._id+"/drafts");        
-                                })
+                                // Succesful File Upload
+                                else{
 
-                        }
+                                        const file = files["input-file"];
+                                        const type = file.mimetype.split("/").pop();
 
-                        
-                        
+                                        if(type != "pdf"){
+                                                return res.status(400).json({
+                                                        status: "Fail",
+                                                        message: "Upload Error: Corrupt File Extension"
+                                                });
+                                        }
+
+                                        const fileName = user._id +  Date.now() + "." + type;
+
+                                        // If the user chooses "Pdf Upload"
+                                        if(data.uploadType === '2'){content = fileName; contentType="file";}
+                                        fs.renameSync(file.filepath, path.join(uploadFolder, fileName)); 
+
+                                }
+
+
+                                
+                                // Create the new document      
+                                const newDocument = new Document({
+                                        subject: data.subject,
+                                        author: userID,
+                                        documentBody: [{
+                                                from: userID,
+                                                to: data.recipient,
+                                                content: content,
+                                                contentType: contentType
+                                        }],
+                                });
+
+                                // Save the new document
+                                newDocument.save();
+
+                                
+                                // If they opt to SEND NOW
+                                if(data.send === "send"){
+                                        // Add the document to the user list
+                                        User.findByIdAndUpdate(user.id, 
+                                        { 
+                                                $push:{ 
+                                                        forwarded: newDocument._id , 
+                                                        authored: newDocument._id,
+                                                        all: newDocument._id
+                                                },
+                                        }, function(updateErr, updatedUser){
+                                                if(updateErr) return handleError(updateErr);
+                                                User.findByIdAndUpdate(data.recipient,
+                                                { 
+                                                        $push: {
+                                                                pending: newDocument._id,
+                                                                all: newDocument._id
+                                                        }
+                                                }, function(updateErr2, updatedUser2){
+                                                        if(updateErr2) return handleError(updateErr2);
+                                                        res.redirect("/dashboard/"+ user._id+"/authored");
+                                                })
+                                        })
+
+                                }
+                                // If they opt to SAVE LATER
+                                else if(data.save === "save"){
+                                        // Add the document to the user list
+                                        User.findByIdAndUpdate(user.id, 
+                                        { 
+                                                $push:{ 
+                                                        drafts: newDocument._id , 
+                                                        all: newDocument._id
+                                                },
+                                        }, function(updateErr, updatedUser){
+                                                if(updateErr) return handleError(updateErr);
+                                                res.redirect("/dashboard/"+ user._id+"/drafts");        
+                                        })
+
+                                }
+
+                        })
                         
                 }
         })

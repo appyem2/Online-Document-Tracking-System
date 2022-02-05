@@ -59,4 +59,3 @@ function generatePassword() {
         const password = document.getElementById("password");
         password.value = retVal;
 }
-

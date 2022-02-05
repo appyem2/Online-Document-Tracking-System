@@ -15,6 +15,7 @@ const documentSchema = new mongoose.Schema({
                         type: mongoose.Schema.Types.ObjectId, ref: 'User'
                 },
                 content: String,
+                contentType: String,
                 addedOn: {
                         type: Date, default: new Date()
                 }

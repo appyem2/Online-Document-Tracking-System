@@ -5,6 +5,10 @@ a{
 .text-bold{
         font-weight: bold;
 }
+iframe{
+        width:100%;
+        min-height: 500px
+}
 
 /* Header Styles */
 #header {

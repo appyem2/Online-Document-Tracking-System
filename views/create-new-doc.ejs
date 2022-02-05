@@ -15,7 +15,7 @@
                                 
                                 <div class="row justify-content-center mt-2">
                                         <div class="col-10" id="create-new-doc-form">
-                                                <form action="/dashboard/<%= user.id %>/create-new-doc" method="post" autocomplete="off"> 
+                                                <form action="/dashboard/<%= user.id %>/create-new-doc" method="post" autocomplete="off" enctype="multipart/form-data"> 
                                                         <div class="form-group mt-2 row">
                                                                 <div class="col-6 align-self-start">
                                                                         <label class="form-label" for="subject">Document Subject <span class="text-danger">*</span></label>
@@ -82,7 +82,7 @@
                                                         </div>
                                                         <div class="form-group mt-2 row hide" id="doc-upload-div">
                                                                 <div class="col-6 align-self-start">
-                                                                        <input name="input-file" type="file" class="form-control" id="doc-upload">
+                                                                        <input name="input-file" type="file" class="form-control" id="doc-upload" accept="application/pdf">
                                                                         <small class="text-muted">The maximum file size is 4 MB and the preferred file format is PDF.</small>
                                                                 </div>
                                                         </div>
