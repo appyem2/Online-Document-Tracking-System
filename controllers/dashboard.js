@@ -1,6 +1,9 @@
 import path from 'path';
 import User from '../models/user.js';
 import Document from '../models/document.js';   
+import formidable from 'formidable';
+import fs from 'fs';
+
 
 // controller function to render "First Time Login Page"
 export const getSignInFirstTime = function(req, res){
@@ -284,7 +287,7 @@ export const  getDocBodies = function (req, res){
 
 // controller function to handle "Edit Profile" request
 export const postEditProfile = function(req, res){
-        const data = req.body;
+        
         const userID = req.params.userID;
 
         User.findById(userID, (err, user)=>{
@@ -292,30 +295,63 @@ export const postEditProfile = function(req, res){
                 if(err) return handleError(err);
 
                 if(user){
-                        User.findByIdAndUpdate(userID, 
-                                {
-                                        prefix: data.prefix,
-                                        firstName: data.firstName,
-                                        middleName: data.middleName,
-                                        lastName: data.lastName,
-                                        group: data.group,
-                                        department: data.department,
-                                        designation: data.designation,
-                                        profilePic: data.profilePic
-                                }, 
-                                (updateErr, updatedUser) => {
-                                if(updateErr) return handleError(updateErr);
+                        
+                        const form = new formidable.IncomingForm();
+                        const uploadFolder = path.resolve("./public/images/profile-pictures");
+                        form.maxFileSize = 40 * 1024 * 1024; // 4MB
+                        form.uploadDir = uploadFolder;  
+
+                        form.parse(req, async function(err, fields, files){
+
+                                const data = fields;
+                                var fileName = "";
                                 
-                                if(updatedUser.firstTime){
-                                        res.render(path.resolve('./views/initial-setup.ejs'),{
-                                                user: updatedUser,
-                                                step: 2
-                                        })
-                                } else{
-                                        res.render(path.resolve('./views/dashboard.ejs'),{
-                                                user: updatedUser,
-                                        })
+                                if(files.profilePic.size){
+                                
+                                        const file = files.profilePic;
+                                        const type = file.mimetype.split("/").pop();
+
+                                        const validTypes = ["jpg", "jpeg", "png"];
+                                        if (validTypes.indexOf(type) === -1) {
+                                                return res.status(400).json({
+                                                        status: "Fail",
+                                                        message: "Upload Error: Corrupt File",
+                                                        error: err,
+                                                });
+                                        }
+
+                                        fileName = user._id + "." + type;
+                                        fs.renameSync(file.filepath, path.join(uploadFolder, fileName)); 
+
+
+                                        if (err) {
+                                                console.log("Error parsing the profile picture image");
+                                                return res.status(400).json({
+                                                        status: "Fail",
+                                                        message: "There was an error parsing the profile picture image",
+                                                        error: err,
+                                                });
+                                        }
+
                                 }
+                                
+                                User.findByIdAndUpdate(userID, 
+                                        {
+                                                prefix: data.prefix,
+                                                firstName: data.firstName,
+                                                middleName: data.middleName,
+                                                lastName: data.lastName,
+                                                group: data.group,
+                                                department: data.department,
+                                                designation: data.designation,
+                                                profilePic: fileName
+                                        }, 
+                                        (updateErr, updatedUser) => {
+                                        if(updateErr) return handleError(updateErr);
+                                        
+                                        res.redirect("/dashboard/"+ updatedUser._id);   
+
+                                })
 
                         })
                 }

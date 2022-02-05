@@ -5,9 +5,6 @@ import ejs from 'ejs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
-import multer from 'multer';
-import GridFsStorage from 'multer-gridfs-storage';
-import Grid from 'gridfs-stream';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -39,10 +36,3 @@ const conn = mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifie
                 console.log('express server listening on port ' + port);
         }))
         .catch((error) => console.error(error.message));
-
-// Init gfs
-let gfs;
-
-
-
-
