@@ -31,7 +31,7 @@
                                                 <!-- The Add Comment Form (Initially Hidden) -->
                                                 <div class="card mb-3 hide" id="comment-form">
                                                         <div class="card-body">
-                                                                <form action="/dashboard/<%= user.id %>/add-comment/<%= document._id %>" method="post" autocomplete="off"> 
+                                                                <form action="/dashboard/<%= user.id %>/add-comment/<%= document._id %>" method="post" autocomplete="off" enctype="multipart/form-data"> 
                                                                 
                                                                 <div class="form-group mt-2 row">
                                                                         <div class="col-3 align-self-start">
@@ -68,7 +68,7 @@
                                                                                 <textarea name="input-text" class="form-control" id="text-entry"></textarea>
                                                                         </div>
                                                                         <div class="col-9 align-self-start hide" id="doc-upload-div">
-                                                                                <input name="input-file" type="file" class="form-control" id="doc-upload">
+                                                                                <input name="input-file" type="file" class="form-control" id="doc-upload" accept="application/pdf">
                                                                                 <small class="text-muted">The maximum file size is 4 MB and the preferred file format is PDF.</small>
                                                                         </div>
                                                                         <div class="col-9 align-self-start hide" id="hard-copy-div">

@@ -383,7 +383,6 @@ export const postEditPassword = function(req, res){
 // controller function to hadle "Create New Document" request
 export const createNewDocument = function(req, res){
 
-        const data = req.body;
         const userID = req.params.userID;
 
 
@@ -513,7 +512,6 @@ export const createNewDocument = function(req, res){
 // controller function to hadle "Create New Document" request
 export const addComment = function(req, res){
 
-        const data = req.body;
         const userID = req.params.userID;
         const docID = req.params.docID;
 
@@ -522,73 +520,116 @@ export const addComment = function(req, res){
                 if(err) return handleError(err);
 
                 if(user){
+                        const form = new formidable.IncomingForm();
+                        const uploadFolder = path.resolve("./public/files");
+                        form.maxFileSize = 40*1024*1024; // 4 MB
+                        form.uploadDir = uploadFolder;
 
-                        var content = "";
-
-                        // If the user chooses "Text Entry"
-                        if(data.uploadType === '1'){content = data["input-text"];}
-                        // If the user chooses "Hard Copy"
-                        else if(data.uploadType === '3'){content = data["input-text-default"]}
-                
-                        // Create the new comment      
-                        const comment = {
-                                from: userID,
-                                to: data.recipient,
-                                content: content,
-                        }
-
-                        
-                        // If they opt to SEND NOW
-                        if(data.send === "send"){
-
-                                Document.findByIdAndUpdate(docID, {$push:{documentBody: comment}}, function(updateErr, doc){
-                                        if(updateErr) return handleError(updateErr);
-                                        
-                                        // Add the document to the user list
-                                        User.findByIdAndUpdate(user.id, 
-                                        { 
-                                                $push:{ 
-                                                        forwarded: doc._id 
-                                                },
-                                                $pull:{
-                                                        pending: doc._id
-                                                }
-                                        }, function(userUpdateErr, updatedUser){
-                                                if(userUpdateErr) return handleError(userUpdateErr);
-                                                User.findByIdAndUpdate(data.recipient,
-                                                { 
-                                                        $addToSet: {
-                                                                pending: doc._id,
-                                                                all: doc._id
-                                                        }
-                                                }, function(updateErr2, updatedUser2){
-                                                        if(updateErr2) return handleError(updateErr2);
-                                                        res.redirect("/dashboard/"+ user._id+"/forwarded");
-                                                })
-                                        })
-
-                                })
+                        form.parse(req, async function(err, fields, files){
                                 
+                                var content = "";
+                                var contentType = "";
+                                const data = fields;
 
-                        }
-                        // If they opt to SAVE LATER
-                        // else if(data.save === "save"){
-                        //         // Add the document to the user list
-                        //         User.findByIdAndUpdate(user.id, 
-                        //         { 
-                        //                 $push:{ 
-                        //                         drafts: newDocument._id , 
-                        //                         all: newDocument._id
-                        //                 },
-                        //         }, function(updateErr, updatedUser){
-                        //                 if(updateErr) return handleError(updateErr);
-                        //                 res.redirect("/dashboard/"+ user._id+"/drafts");        
-                        //         })
 
-                        // }
+                                // No file is uploaded
+                                if(files["input-file"]["size"] == 0){
+                                        // If the user chooses "Text Entry"
+                                        if(data.uploadType === '1'){content = data["input-text"]; contentType="text";}
+                                        // If the user chooses "Hard Copy"
+                                        else if(data.uploadType === '3'){content = data["input-text-default"]; contentType="text";}
+                                }
+
+                                // File size exceeds 4MB Size
+                                else if(files["input-file"]["size"] > 40*1024*1024){
+                                        return res.status(400).json({
+                                                status: "Fail",
+                                                message: "Upload Error: Maximum Size Limit Exceeded",
+                                        })
+                                }
+
+                                // Succesful File Upload
+                                else{
+
+                                        const file = files["input-file"];
+                                        const type = file.mimetype.split("/").pop();
+
+                                        if(type != "pdf"){
+                                                return res.status(400).json({
+                                                        status: "Fail",
+                                                        message: "Upload Error: Corrupt File Extension"
+                                                });
+                                        }
+
+                                        const fileName = user._id +  Date.now() + "." + type;
+
+                                        // If the user chooses "Pdf Upload"
+                                        if(data.uploadType === '2'){content = fileName; contentType="file";}
+                                        fs.renameSync(file.filepath, path.join(uploadFolder, fileName)); 
+
+                                }
+                        
+
+                                // Create the new comment      
+                                const comment = {
+                                        from: userID,
+                                        to: data.recipient,
+                                        content: content,
+                                        contentType: contentType
+                                }
 
                         
+                                // If they opt to SEND NOW
+                                if(data.send === "send"){
+
+                                        Document.findByIdAndUpdate(docID, {$push:{documentBody: comment}}, function(updateErr, doc){
+                                                if(updateErr) return handleError(updateErr);
+                                                
+                                                // Add the document to the user list
+                                                User.findByIdAndUpdate(user.id, 
+                                                { 
+                                                        $push:{ 
+                                                                forwarded: doc._id 
+                                                        },
+                                                        $pull:{
+                                                                pending: doc._id
+                                                        }
+                                                }, function(userUpdateErr, updatedUser){
+                                                        if(userUpdateErr) return handleError(userUpdateErr);
+                                                        User.findByIdAndUpdate(data.recipient,
+                                                        { 
+                                                                $addToSet: {
+                                                                        pending: doc._id,
+                                                                        all: doc._id
+                                                                }
+                                                        }, function(updateErr2, updatedUser2){
+                                                                if(updateErr2) return handleError(updateErr2);
+                                                                res.redirect("/dashboard/"+ user._id+"/forwarded");
+                                                        })
+                                                })
+
+                                        })
+                                        
+
+                                }
+                                // If they opt to SAVE LATER
+                                // else if(data.save === "save"){
+                                //         // Add the document to the user list
+                                //         User.findByIdAndUpdate(user.id, 
+                                //         { 
+                                //                 $push:{ 
+                                //                         drafts: newDocument._id , 
+                                //                         all: newDocument._id
+                                //                 },
+                                //         }, function(updateErr, updatedUser){
+                                //                 if(updateErr) return handleError(updateErr);
+                                //                 res.redirect("/dashboard/"+ user._id+"/drafts");        
+                                //         })
+
+                                // }
+
                         
+                        })
                         
                 }
         })
