@@ -4,6 +4,9 @@ import Document from '../models/document.js';
 import formidable from 'formidable';
 import fs from 'fs';
 import { copyFileSync } from 'fs';
+import pkg from 'responselike';
+const { from } = pkg;
+//import { from } from 'responselike';
 
 
 // controller function to render "First Time Login Page"
@@ -75,7 +78,6 @@ export const getForwarded = function(req, res){
                 if(err) return handleError(err);
 
                 if(user){
-
                         Document.find({_id: { $in:  user.forwarded }}, function(findErr, docs){
                                 if(findErr) return handleError(findErr);
                                 res.render(path.resolve('./views/forwarded.ejs'), {
@@ -161,7 +163,6 @@ export const getAllDocuments = function(req, res){
                 if(user){
                         Document.find({_id: { $in:  user.all }}, function(findErr, docs){
                                 if(findErr) return handleError(findErr);
-
                                 res.render(path.resolve('./views/all-documents.ejs'), {
                                         user: user, 
                                         docs: docs
@@ -239,12 +240,12 @@ export const  getDocBodies = function (req, res){
 
                                 doc.documentBody.forEach((docBody, index) =>{
                                         
-                                        User.findById(docBody.from, (err3, fromUser)=>{
-                                                docBody.from = fromUser;
+                                        User.findById(docBody.from.ID, (err3, fromUser)=>{
+                                                docBody.from.ID = fromUser;
 
                                                 
-                                                User.findById(docBody.to, (err4, toUser)=>{
-                                                        docBody.to = toUser;
+                                                User.findById(docBody.to.ID, (err4, toUser)=>{
+                                                        docBody.to.ID = toUser;
                                                         
                                                         if(user.all.includes(docID)){
 
@@ -380,7 +381,7 @@ export const postEditPassword = function(req, res){
 
 }
 
-// controller function to hadle "Create New Document" request
+// controller function to handle "Create New Document" request
 export const createNewDocument = function(req, res){
 
         const userID = req.params.userID;
@@ -390,7 +391,6 @@ export const createNewDocument = function(req, res){
                 if(err) return handleError(err);
 
                 if(user){
-
                         const form = new formidable.IncomingForm();
                         const uploadFolder = path.resolve("./public/files");
                         form.maxFileSize = 40*1024*1024; // 4 MB
@@ -423,7 +423,7 @@ export const createNewDocument = function(req, res){
 
                                 // Succesful File Upload
                                 else{
-
+                                        
                                         const file = files["input-file"];
                                         const type = file.mimetype.split("/").pop();
 
@@ -441,24 +441,31 @@ export const createNewDocument = function(req, res){
                                         fs.renameSync(file.filepath, path.join(uploadFolder, fileName)); 
 
                                 }
-
-
+                                
+                                User.findById(data.recipient, (err4, to_user)=>{
                                 
                                 // Create the new document      
                                 const newDocument = new Document({
                                         subject: data.subject,
                                         author: userID,
                                         documentBody: [{
-                                                from: userID,
-                                                to: data.recipient,
+                                                from: {
+                                                        ID: userID,
+                                                        name: user.firstName+" "+user.middleName+" "+user.lastName,
+                                                        email: user.email,
+                                                },
+                                                to: {
+                                                        ID: data.recipient,
+                                                        name: to_user.firstName+" "+to_user.middleName+" "+to_user.lastName,
+                                                        email: to_user.email,
+                                                },
                                                 content: content,
                                                 contentType: contentType
                                         }],
                                 });
-
+                        
                                 // Save the new document
                                 newDocument.save();
-
                                 
                                 // If they opt to SEND NOW
                                 if(data.send === "send"){
@@ -466,7 +473,8 @@ export const createNewDocument = function(req, res){
                                         User.findByIdAndUpdate(user.id, 
                                         { 
                                                 $push:{ 
-                                                        forwarded: newDocument._id , 
+                                                        forwarded: newDocument._id ,
+                                                        docBodyIndex: 0,
                                                         authored: newDocument._id,
                                                         all: newDocument._id
                                                 },
@@ -500,6 +508,7 @@ export const createNewDocument = function(req, res){
                                         })
 
                                 }
+                        });
 
                         })
                         
@@ -509,7 +518,7 @@ export const createNewDocument = function(req, res){
 
 }
 
-// controller function to hadle "Create New Document" request
+// controller function to handle "Add Comment" request
 export const addComment = function(req, res){
 
         const userID = req.params.userID;
@@ -568,12 +577,22 @@ export const addComment = function(req, res){
                                         fs.renameSync(file.filepath, path.join(uploadFolder, fileName)); 
 
                                 }
-                        
+                                
+                                User.findById(data.recipient, (err4, to_user1)=>{
+                                        
 
                                 // Create the new comment      
                                 const comment = {
-                                        from: userID,
-                                        to: data.recipient,
+                                        from: {
+                                                ID: userID,
+                                                name: user.firstName+" "+user.middleName+" "+user.lastName,
+                                                email: user.email,
+                                        },
+                                        to: {
+                                                ID: data.recipient,
+                                                name: to_user1.firstName+" "+to_user1.middleName+" "+to_user1.lastName,
+                                                email: to_user1.email,
+                                        },
                                         content: content,
                                         contentType: contentType
                                 }
@@ -584,12 +603,14 @@ export const addComment = function(req, res){
 
                                         Document.findByIdAndUpdate(docID, {$push:{documentBody: comment}}, function(updateErr, doc){
                                                 if(updateErr) return handleError(updateErr);
-                                                
+                                                //console.log(doc.documentBody.length);
                                                 // Add the document to the user list
+                                                
                                                 User.findByIdAndUpdate(user.id, 
                                                 { 
                                                         $push:{ 
-                                                                forwarded: doc._id 
+                                                                forwarded: doc._id,
+                                                                docBodyIndex: doc.documentBody.length
                                                         },
                                                         $pull:{
                                                                 pending: doc._id
@@ -628,7 +649,7 @@ export const addComment = function(req, res){
 
                                 // }
 
-                        
+                        });
                         })
                         
                 }

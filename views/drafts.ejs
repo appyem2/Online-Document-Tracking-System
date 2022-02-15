@@ -47,7 +47,7 @@
                                                                                 <tr>
                                                                                         <td><a href="/dashboard/<%= user._id %>/<%= doc._id %>"><%= doc._id %></a></td>
                                                                                         <td><%= doc.subject %></td>
-                                                                                        <td></td>
+                                                                                        <td><%= doc.documentBody[doc.documentBody.length-1].addedOn %></td>
                                                                                 </tr>
                                                                         <% }) %>
                                                                 </tbody>

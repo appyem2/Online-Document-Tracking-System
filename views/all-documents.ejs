@@ -43,19 +43,24 @@
                                                                                 <th scope="col">Document Subject</th>
                                                                                 <th scope="col">Current Status</th>
                                                                                 <th scope="col">Date Modified</th>   
-                                                                                <th scope="col">Received From</th>
-                                                                                <th scope="col">Forwarded To</th>
                                                                         </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                        <% docs.forEach(doc => { %>
+                                                                        <% docs.forEach((doc,index) => { %>
                                                                                 <tr>
                                                                                         <td><a href="/dashboard/<%= user._id %>/<%= doc._id %>"><%= doc._id %></a> </td>
                                                                                         <td><%= doc.subject %></td>
-                                                                                        <td></td>
-                                                                                        <td></td>
-                                                                                        <td></td>
-                                                                                        <td></td>
+                                                                                        <% var currentStatus="" %>
+                                                                                        <% for(var i=0;i<user.drafts.length;i++){ %>
+                                                                                                <% if(user.drafts[i]==doc.id){ %>
+                                                                                                        <% currentStatus=doc.documentBody[doc.documentBody.length-1].from.name %>
+                                                                                                        <% } %>
+                                                                                                <% } %>
+                                                                                        <% if(currentStatus==""){ %>
+                                                                                                <% currentStatus=doc.documentBody[doc.documentBody.length-1].to.name; %>
+                                                                                                <% } %>
+                                                                                        <td><%= currentStatus %></td>
+                                                                                        <td><%= doc.documentBody[doc.documentBody.length-1].addedOn %></td>
                                                                                 </tr>
                                                                         <% }) %>
                                                                 </tbody>

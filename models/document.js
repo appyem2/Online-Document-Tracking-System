@@ -9,10 +9,14 @@ const documentSchema = new mongoose.Schema({
         subject: String,
         documentBody: [{
                 from:{
-                        type: mongoose.Schema.Types.ObjectId, ref: 'User'
+                        ID: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+                        name: String,
+                        email: String
                 },
                 to:{
-                        type: mongoose.Schema.Types.ObjectId, ref: 'User'
+                        ID: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+                        name: String,
+                        email: String
                 },
                 content: String,
                 contentType: String,

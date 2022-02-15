@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
         profilePic: String,
         pending: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Document' }],
         forwarded: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Document' }],
+        docBodyIndex: [{ type: Number }],
         drafts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Document' }],
         authored: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Document' }],
         resolved: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Document' }],

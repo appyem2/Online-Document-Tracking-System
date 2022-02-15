@@ -19,5 +19,13 @@
     "fs": "0.0.1-security",
     "mongoose": "^6.1.1",
     "nodemon": "^2.0.14"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/appyem2/Online-Document-Tracking-System.git"
+  },
+  "bugs": {
+    "url": "https://github.com/appyem2/Online-Document-Tracking-System/issues"
+  },
+  "homepage": "https://github.com/appyem2/Online-Document-Tracking-System#readme"
 }
