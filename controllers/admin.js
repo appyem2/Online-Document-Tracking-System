@@ -2,6 +2,9 @@ import path from 'path';
 import User from '../models/user.js';
 
 
+
+import nodemailer from 'nodemailer';
+
 // Controller function to render "Add New User" page
 export const getAddNewUser = function(req, res){
         res.render(path.resolve('./views/add-user.ejs'), {
@@ -51,6 +54,33 @@ export const addNewUser = function(req, res){
                         user.save();
 
                         //TODO: Setup the mail sending system
+                        
+                        let mailTransporter=nodemailer.createTransport({
+                                service:'gmail',
+                                auth:{
+                                        user:'',                //sender address
+                                        pass:''                 //sender password
+                                }
+                        });
+
+                        let name= user.prefix+' '+user.lastName;
+
+                        let mailDetails={
+                                from:'510818012.soumili@students.iiests.ac.in',
+                                to: user.email,
+                                subject: 'Sign Up Successful',
+                                html: '<p><h2>Hello '+ name +',</h2> You have been signed up succesfully for Online Documentation System.<br> Please sign in with your registered email id.<br>Given Password: <strong>' + user.password +'</strong></p2>'
+                        };
+
+                        mailTransporter.sendMail(mailDetails,function(err,data) {
+                                if(err){
+                                        console.log('Error Occurs');
+                                }else{
+                                        console.log('Email sent');
+                                }
+                        });
+
+
 
                         res.render(path.resolve('./views/add-user.ejs'), {
                                 message: "Successfully Added: " + user.email,
