@@ -78,11 +78,22 @@ export const getForwarded = function(req, res){
                 if(err) return handleError(err);
 
                 if(user){
+                        var docBodyIndex=[];
+                        var documentBodyIndex;
                         Document.find({_id: { $in:  user.forwarded }}, function(findErr, docs){
                                 if(findErr) return handleError(findErr);
+
+                                docs.forEach(doc=>{
+                                        user.forwardedDocBodyIndex.forEach(index=>{
+                                                if(doc._id.equals(index.documentID))
+                                                        documentBodyIndex=index.documentIndex;
+                                        })
+                                        docBodyIndex.push(documentBodyIndex);
+                                })
                                 res.render(path.resolve('./views/forwarded.ejs'), {
                                         user: user, 
-                                        docs: docs
+                                        docs: docs,
+                                        docBodyIndex: docBodyIndex
                                 });
                         })
                 }
@@ -474,7 +485,10 @@ export const createNewDocument = function(req, res){
                                         { 
                                                 $push:{ 
                                                         forwarded: newDocument._id ,
-                                                        docBodyIndex: 0,
+                                                        forwardedDocBodyIndex:{
+                                                                documentID: newDocument._id,
+                                                                documentIndex: 0
+                                                        },
                                                         authored: newDocument._id,
                                                         all: newDocument._id
                                                 },
@@ -603,14 +617,16 @@ export const addComment = function(req, res){
 
                                         Document.findByIdAndUpdate(docID, {$push:{documentBody: comment}}, function(updateErr, doc){
                                                 if(updateErr) return handleError(updateErr);
-                                                //console.log(doc.documentBody.length);
                                                 // Add the document to the user list
                                                 
                                                 User.findByIdAndUpdate(user.id, 
                                                 { 
                                                         $push:{ 
                                                                 forwarded: doc._id,
-                                                                docBodyIndex: doc.documentBody.length
+                                                                forwardedDocBodyIndex:{
+                                                                        documentID: doc._id,
+                                                                        documentIndex: doc.documentBody.length
+                                                                },
                                                         },
                                                         $pull:{
                                                                 pending: doc._id

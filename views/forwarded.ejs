@@ -48,14 +48,14 @@
                                                                                 <tr>
                                                                                         <td><a href="/dashboard/<%= user._id %>/<%= doc._id %>"><%= doc._id %></a></td>
                                                                                         <td><%= doc.subject %> </td>
-                                                                                        <td><%= doc.documentBody[user.docBodyIndex[index]].addedOn %></td>
+                                                                                        <td><%= doc.documentBody[docBodyIndex[index]].addedOn %></td>
 
-                                                                                        <% if(user.docBodyIndex[index]==0){ %>
-                                                                                                <td><%= doc.documentBody[user.docBodyIndex[index]].from.name %></td>
+                                                                                        <% if(docBodyIndex[index]==0){ %>
+                                                                                                <td><%= doc.documentBody[docBodyIndex[index]].from.name %></td>
                                                                                         <% } else { %>
-                                                                                                <td><%= doc.documentBody[user.docBodyIndex[index]-1].from.name %></td>
+                                                                                                <td><%= doc.documentBody[docBodyIndex[index]-1].from.name %></td>
                                                                                         <% } %>
-                                                                                        <td><%= doc.documentBody[user.docBodyIndex[index]].to.name %></td>
+                                                                                        <td><%= doc.documentBody[docBodyIndex[index]].to.name %></td>
 
 
                                                                                 </tr>
