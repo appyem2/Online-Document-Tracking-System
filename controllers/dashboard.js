@@ -246,6 +246,7 @@ export const  getDocBodies = function (req, res){
                 if(err) return handleError(err);
 
                 if(user){
+                        var lastIndex=0;
                         Document.findById(docID, (err2, doc) => {
                                 if(err2) return handleError(err2);
 
@@ -260,7 +261,10 @@ export const  getDocBodies = function (req, res){
                                                         
                                                         if(user.all.includes(docID)){
 
-
+                                                                if(docBody.from.ID.equals(user._id) || docBody.to.ID.equals(user._id))
+                                                                {
+                                                                        lastIndex=Math.max(lastIndex,index);
+                                                                }
                                                                 if(index === doc.documentBody.length -1){
                                                                         
                                                                         var lastUserInTheChain = docBody.to.email == user.email;
@@ -271,7 +275,8 @@ export const  getDocBodies = function (req, res){
                                                                                         document: doc,
                                                                                         user: user,
                                                                                         lastUser: lastUserInTheChain,
-                                                                                        users: users
+                                                                                        users: users,
+                                                                                        lastIndex: lastIndex
                                                                                 });  
                                                                         })   
                                                                 }

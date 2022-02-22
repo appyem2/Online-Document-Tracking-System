@@ -86,7 +86,9 @@
                                                 </div>
                                                 
                                                 <!-- Document Bodies in a reverse chronological order -->
+                                                <% var index=document.documentBody.length-1 %>
                                                 <% document.documentBody.slice().reverse().forEach(docBody => { %>
+                                                        <% if (index <= lastIndex) { %>
                                                         <div class="card mt-2 mb-2">
                                                                 <div class="card-body">
                                                                         <div class="row">
@@ -113,6 +115,8 @@
                                                                         <% } %>
                                                                 </div>
                                                         </div>
+                                                        <% } %>
+                                                        <% index-- %>
                                                 <% }) %>
                                                 
                                                 <!-- Dummy div to give lower padding -->
