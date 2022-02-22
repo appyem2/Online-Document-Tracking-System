@@ -48,7 +48,7 @@
                                                                                 <tr>
                                                                                         <td><a href="/dashboard/<%= user._id %>/<%= doc._id %>"><%= doc._id %></a></td>
                                                                                         <td><%= doc.subject %> </td>
-                                                                                        <td><%= doc.documentBody[docBodyIndex[index]].addedOn %></td>
+                                                                                        <td><%= doc.documentBody[docBodyIndex[index]].addedOn.toString().substring(4, 25) %></td>
 
                                                                                         <% if(docBodyIndex[index]==0){ %>
                                                                                                 <td><%= doc.documentBody[docBodyIndex[index]].from.name %></td>
