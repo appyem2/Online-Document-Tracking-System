@@ -51,7 +51,7 @@
                                                                                         <td><%= doc.documentBody[docBodyIndex[index]].addedOn.toString().substring(4, 25) %></td>
 
                                                                                         <% if(docBodyIndex[index]==0){ %>
-                                                                                                <td><%= doc.documentBody[docBodyIndex[index]].from.name %></td>
+                                                                                                <td><%= '-' %></td>
                                                                                         <% } else { %>
                                                                                                 <td><%= doc.documentBody[docBodyIndex[index]-1].from.name %></td>
                                                                                         <% } %>
