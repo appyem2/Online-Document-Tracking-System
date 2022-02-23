@@ -140,11 +140,24 @@ export const getDrafts = function(req, res){
                 if(err) return handleError(err);
 
                 if(user){
+                        var documents=[];
+                        var dates=[];
                         Document.find({_id: { $in:  user.drafts }}, function(findErr, docs){
                                 if(findErr) return handleError(findErr);
+                                docs.forEach(doc=>{
+                                        var obj={
+                                                docid: doc,
+                                                date: doc.documentBody[doc.documentBody.length-1].addedOn
+                                        }
+                                        dates.push(obj);
+                                })
+                                const sortedDates = dates.sort((a, b) => b.date - a.date);
+                                sortedDates.forEach(d=>{
+                                        documents.push(d.docid);
+                                })
                                 res.render(path.resolve('./views/drafts.ejs'), {
                                         user: user, 
-                                        docs: docs
+                                        docs: documents
                                 });
                         })
                 }
@@ -450,7 +463,7 @@ export const createNewDocument = function(req, res){
                                 var contentType = "";
                                 const data = fields;
 
-                                console.log(files);
+                                //console.log(files);
 
                                 // No file is uploaded
                                 if(files["input-file"]["size"] == 0){
