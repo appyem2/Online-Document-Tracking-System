@@ -78,24 +78,43 @@ export const getForwarded = function(req, res){
                 if(err) return handleError(err);
 
                 if(user){
-                        var docBodyIndex=[];
-                        var documentBodyIndex;
-                        Document.find({_id: { $in:  user.forwarded }}, function(findErr, docs){
+                        var dates=[];
+                        var dateIndex;
+                        var documents=[];
+                        Document.find({_id: { $in:  user.forwarded }},function(findErr, docs){
                                 if(findErr) return handleError(findErr);
 
                                 docs.forEach(doc=>{
                                         user.forwardedDocBodyIndex.forEach(index=>{
-                                                if(doc._id.equals(index.documentID))
+                                                if(doc._id.equals(index.documentID)){
+                                                        dateIndex=index.documentIndex;
+                                                }
+                                        })
+                                        var obj={doc: doc,
+                                        date: doc.documentBody[dateIndex].addedOn}
+                                        dates.push(obj);
+                                })
+                                const sortedDates = dates.sort((a, b) => b.date - a.date);
+                                sortedDates.forEach(d=>{
+                                        documents.push(d.doc);
+                                })
+                                var docBodyIndex=[];
+                                var documentBodyIndex;
+                                documents.forEach(doc=>{
+                                        user.forwardedDocBodyIndex.forEach(index=>{
+                                                if(doc._id.equals(index.documentID)){
                                                         documentBodyIndex=index.documentIndex;
+                                                }
                                         })
                                         docBodyIndex.push(documentBodyIndex);
                                 })
                                 res.render(path.resolve('./views/forwarded.ejs'), {
                                         user: user, 
-                                        docs: docs,
+                                        docs: documents,
                                         docBodyIndex: docBodyIndex
                                 });
                         })
+                
                 }
         })
 }
