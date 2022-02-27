@@ -45,8 +45,8 @@
                                                                                 <tr>
                                                                                         <td><a href="/dashboard/<%= user._id %>/<%= doc._id %>"><%= doc._id %></a> </td>
                                                                                         <td><%= doc.subject %> </td>
-                                                                                        <td></td>
-                                                                                        <td></td>
+                                                                                        <td><%= doc.documentBody[doc.documentBody.length-1].addedOn.toString().substring(4, 25)%></td>
+                                                                                        <td><%= doc.documentBody[doc.documentBody.length-1].from.name %></td>
                                                                                 </tr>
                                                                         <% }) %>
                                                                 </tbody>
