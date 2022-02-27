@@ -2,7 +2,7 @@ import path from 'path';
 import User from '../models/user.js';
 import Document from '../models/document.js';   
 import formidable from 'formidable';
-
+import fs from 'fs';
 
 
 // controller function to render "First Time Login Page"
@@ -452,7 +452,6 @@ export const createNewDocument = function(req, res){
                                 var contentType = "";
                                 const data = fields;
 
-                                //console.log(files);
 
                                 // No file is uploaded
                                 if(files["input-file"]["size"] == 0){
@@ -460,6 +459,11 @@ export const createNewDocument = function(req, res){
                                         if(data.uploadType === '1'){content = data["input-text"]; contentType="text";}
                                         // If the user chooses "Hard Copy"
                                         else if(data.uploadType === '3'){content = data["input-text-default"]; contentType="text";}
+
+                                        fs.unlink(files["input-file"]["filepath"], function(err){
+                                                if(err) return console.log(err);
+                                                console.log('file deleted successfully');
+                                        });
                                 }
 
                                 // File size exceeds 4MB Size
@@ -487,6 +491,7 @@ export const createNewDocument = function(req, res){
 
                                         // If the user chooses "Pdf Upload"
                                         if(data.uploadType === '2'){content = fileName; contentType="file";}
+                                        
                                         fs.renameSync(file.filepath, path.join(uploadFolder, fileName)); 
 
                                 }
