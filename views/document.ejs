@@ -14,13 +14,17 @@
                                         </div>
                                 
                                         <div class="col-2 align-self-center">
-                                                <% if (lastUser) { %>
+                                                <% if (lastUser && !resolved) { %>
                                                         <button type="button" class="btn btn-outline-primary float-end" onclick="hideUnhide('comment-form')">Add Comment</a>
                                                 <% } %>
                                         </div>
                                         <div class="col-2 align-self-center">
-                                                <% if(lastUser) { %>
-                                                        <a type="button" class="btn btn-outline-secondary" href="/dashboard/<%= user._id %>/resolve/<%= document._id %>">Resolve</a>
+                                                <% if(lastUser && !resolved) { %>
+                                                        <form action="/dashboard/<%= user._id %>/resolve/<%= document._id %>" method="POST">
+                                                                <button type="submit" class="btn btn-outline-secondary">Resolve</button>
+                                                        </form>
+                                                <% } else if(resolved) { %>
+                                                        <h3><span class="badge bg-success">Resolved</span></h3>
                                                 <% } %>
                                         </div>
                                         <div class="col-10">
@@ -88,12 +92,15 @@
                                                 <!-- Document Bodies in a reverse chronological order -->
                                                 <% var index=document.documentBody.length-1 %>
                                                 <% document.documentBody.slice().reverse().forEach(docBody => { %>
+                                                        <% if (docBody.from.email == docBody.to.email) { %>
+                                                                <p class="text-center">This document has been resolved by <strong><%= docBody.from.ID.prefix %> <%= docBody.from.ID.firstName %> <%= docBody.from.ID.middleName %> <%= docBody.from.ID.lastName %></strong> <small><<%= docBody.from.email %>></small> on <em><%= docBody.addedOn.toString().substring(4, 25) %></em></p>
+                                                        <% } else { %>
                                                         <div class="card mt-2 mb-2">
                                                                 <div class="card-body">
                                                                         <div class="row">
                                                                                 <div class="col-8">
                                                                                         <p>
-                                                                                                <strong><%= docBody.from.ID.prefix %> <%= docBody.from.ID.firstName %> <%= docBody.from.ID.middleName %> <%= docBody.from.ID.lastName %></strong> <small><<%= docBody.from.email %>></small>
+                                                                                                <strong><%= docBody.from.ID.prefix %> <%= docBody.from.ID.firstName %> <%= docBody.from.ID.middleName %> <%= docBody.from.ID.lastName %></strong> <small><<%= docBody.from.email %>></small> 
                                                                                                 <br>
                                                                                                 <small class="text-muted">to <%= docBody.to.ID.prefix %> <%= docBody.to.ID.firstName %> <%= docBody.to.ID.middleName %> <%= docBody.to.ID.lastName %> <<%= docBody.to.email %>> </small>
                                                                                         </p>        
@@ -116,10 +123,14 @@
                                                                 </div>
                                                                 <% } else { %>
                                                                         <div>
-                                                                                <p><em>&ensp;&ensp;Sorry! Information Classified!</em></p>
+                                                                                <!-- <p><em>&ensp;&ensp;Sorry! Information Classified!</em></p> -->
+                                                                                <div class="blur" data-bs-toggle="tooltip" data-bs-html="true" title="&ensp;&ensp;Sorry! Information Classified!">
+                                                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Satis est ad hoc responsum. Et quidem, inquit, vehementer errat; Cur igitur, inquam, res tam dissimiles eodem nomine appellas? Tum ille: Tu autem cum ipse tantum librorum habeas, quos hic tandem requiris? Hic quoque suus est de summoque bono dissentiens dici vere Peripateticus non potest. Quantum Aristoxeni ingenium consumptum videmus in musicis? Duo Reges: constructio interrete.
+                                                                                </div>
                                                                         </div>
                                                                 <% } %>
                                                         </div>
+                                                        <% } %>
                                                         <% index-- %>
                                                 <% }) %>
                                                 

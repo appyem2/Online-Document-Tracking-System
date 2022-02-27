@@ -2,11 +2,7 @@ import path from 'path';
 import User from '../models/user.js';
 import Document from '../models/document.js';   
 import formidable from 'formidable';
-import fs from 'fs';
-import { copyFileSync } from 'fs';
-import pkg from 'responselike';
-const { from } = pkg;
-//import { from } from 'responselike';
+
 
 
 // controller function to render "First Time Login Page"
@@ -282,6 +278,11 @@ export const  getDocBodies = function (req, res){
                                 if(err2) return handleError(err2);
 
                                 doc.documentBody.forEach((docBody, index) =>{
+                                        let resolved = false;
+                                        if (index == doc.documentBody.length -1){
+                                                let lastDocBody = docBody;  
+                                                resolved = (lastDocBody.from.email == lastDocBody.to.email);
+                                        }
                                         
                                         User.findById(docBody.from.ID, (err3, fromUser)=>{
                                                 docBody.from.ID = fromUser;
@@ -307,7 +308,8 @@ export const  getDocBodies = function (req, res){
                                                                                         user: user,
                                                                                         lastUser: lastUserInTheChain,
                                                                                         users: users,
-                                                                                        lastIndex: lastIndex
+                                                                                        lastIndex: lastIndex,
+                                                                                        resolved: resolved
                                                                                 });  
                                                                         })   
                                                                 }
@@ -708,5 +710,65 @@ export const addComment = function(req, res){
         })
 
 
+}
+
+// controller function to handle "Resolve" request
+export const postResolve = function(req, res){
+
+        const userID = req.params.userID;
+        const docID = req.params.docID;
+
+        User.findById(userID, function(err,resolver){
+
+                if(err) return handleError(err);
+
+                // Create the new comment      
+                const finalComment = {
+                        from: {
+                                ID: userID,
+                                name: resolver.firstName+" "+resolver.middleName+" "+resolver.lastName,
+                                email: resolver.email,
+                        },
+                        to: {
+                                ID: userID,
+                                name: resolver.firstName+" "+resolver.middleName+" "+resolver.lastName,
+                                email: resolver.email,
+                        },
+                        content: "RESOLVED",
+                        contentType: "text"
+                }
+
+
+                Document.findByIdAndUpdate(docID, {$push: {documentBody: finalComment}}, function(err2, docUpdated){
+                        if(err2) return handleError(err2);
+
+                        console.log(docUpdated);
+                        
+                        docUpdated.documentBody.forEach((docBody, index) => {
+                                const user_id = docBody.from.ID;
+
+                                User.findByIdAndUpdate(user_id, {$addToSet: {resolved: docUpdated._id}}, function(err3, updatedUser){
+                                        if(err3) return handleError(err3); 
+                                        
+                                        if(index == docUpdated.documentBody.length-1){
+                                                
+                                                User.findByIdAndUpdate(userID, {
+                                                        $addToSet:{
+                                                                resolved: docUpdated._id
+                                                        }, 
+                                                        $pull: {
+                                                                pending: docUpdated._id
+                                                        }
+                                                }, function(err3, updatedUser){
+                                                        if(err3) return handleError(err3);
+
+                                                        res.redirect("/dashboard/" + userID+ "/" + docID);
+                                                })
+                                        }
+                                })
+                        })
+                })
+
+        })
 }
 

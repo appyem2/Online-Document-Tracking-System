@@ -1,5 +1,5 @@
 import express from 'express';
-import {getPending, getForwarded, getDrafts, getResolved, getAuthored, getAllDocuments, getCreateNewDoc, getDashboard, getSignInFirstTime, postEditProfile, postEditPassword, createNewDocument, getEditProfile, getEditPassword, getDocBodies, addComment} from '../controllers/dashboard.js';
+import {getPending, getForwarded, getDrafts, getResolved, getAuthored, getAllDocuments, getCreateNewDoc, getDashboard, getSignInFirstTime, postEditProfile, postEditPassword, createNewDocument, getEditProfile, getEditPassword, getDocBodies, addComment, postResolve} from '../controllers/dashboard.js';
 
 const router = express.Router();
 
@@ -21,6 +21,6 @@ router.post("/:userID/edit-profile", postEditProfile);
 router.post("/:userID/edit-password", postEditPassword);
 router.post("/:userID/create-new-doc", createNewDocument);
 router.post("/:userID/add-comment/:docID", addComment);
-
+router.post("/:userID/resolve/:docID", postResolve);
 
 export default router;
