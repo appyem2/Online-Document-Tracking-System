@@ -9,21 +9,23 @@
                         <div class="container mt-5 mb-5">
                                 <div class="row justify-content-around">
                                         <div class="col-10">
-                                                <h2>Create New Document</h2><hr>
+                                                <h2><%= doc.subject %></h2>
+                                                <h5 class="text-muted">Document ID: <%= doc._id %> </h5>
+                                                <hr>
                                         </div>
                                 </div>
                                 
                                 <div class="row justify-content-center mt-2">
                                         <div class="col-10" id="create-new-doc-form">
-                                                <form action="/dashboard/<%= user.id %>/create-new-doc" method="post" autocomplete="off" enctype="multipart/form-data"> 
+                                                <form action="/dashboard/<%= user.id %>/handle-drafts/<%= doc._id %>" method="post" autocomplete="off" enctype="multipart/form-data"> 
                                                         <div class="form-group mt-2 row">
                                                                 <div class="col-6 align-self-start">
                                                                         <label class="form-label" for="subject">Document Subject <span class="text-danger">*</span></label>
-                                                                        <input type="text" id="subject" class="form-control" name="subject" required/>
+                                                                        <input type="text" id="subject" class="form-control" name="subject" required value="<%= doc.subject %>" readonly/>
                                                                 </div>
                                                                 <div class="col-6 align-self-center">
                                                                         <label class="form-label" for="subject">
-                                                                                <small><strong>Document Subject:</strong> This is the title of the subject that summarizes the content of the document</small>
+                                                                                <small><strong>Document Subject:</strong> This is the title of the subject that summarizes the content of the document. ALREADY GIVEN, CANNOT BE EDITED</small>
                                                                         </label>
                                                                 </div>
                                                         </div>
@@ -31,26 +33,21 @@
                                                                 <div class="col-6 align-self-start">
                                                                         <label class="form-label" for="recipient">Recipient <span class="text-danger">*</span></label>
                                                                         <select class="form-control" id="recipient" name="recipient" required>
-                                                                                <option value="undefined">-- None --</option>
-                                                                                <% users.forEach(userToSend => { %>
-                                                                                        <% if (userToSend.firstName !== "") { %>
-                                                                                                <option value="<%= userToSend._id %>"><%= userToSend.prefix %> <%=userToSend.firstName%> <%=userToSend.middleName%> <%=userToSend.lastName%></option>
-                                                                                        <% } %>
-                                                                                <% }) %>
+                                                                                <option value="<%= doc.documentBody[0].to.ID %>"><%= doc.documentBody[0].to.name%></option>
                                                                         </select>
                                                                 </div>
                                                                 <div class="col-6 align-self-center">
                                                                         <label class="form-label" for="recipient">
-                                                                                <small><strong>Recipient:</strong> Please select the recipient from the list below. If you cannot find the person, please drop a mail at "support mail id"</small>
+                                                                                <small><strong>Recipient:</strong> Recipient of this document. ALREADY CHOSEN, CANNOT BE EDITED</small>
                                                                         </label>
                                                                 </div>
                                                         </div>
                                                         <div class="form-group mt-2 row">
                                                                 <div class="col-6 align-self-start">
-                                                                        <label class="form-label" for="method">I will provide the document body by <span class="text-danger">*</span></label>
+                                                                        <label class="form-label" for="method">I will provide the document body by <%= doc.documentBody[0].contentType %> <span class="text-danger">*</span></label>
                                                                         <select class="form-control" id="method" name="uploadType" onchange="chooseUploadType()">
-                                                                                <option value="1" selected>Text Entry</option>
-                                                                                <option value="2">Document Upload</option>
+                                                                                <option value="1" <%= doc.documentBody[0].contentType == "text" ? "selected" : ""%>>Text Entry</option>
+                                                                                <option value="2" <%= doc.documentBody[0].contentType == "file" ? "selected" : ""%>>Document Upload</option>
                                                                                 <option value="3">Hard Copy</option>
                                                                         </select>
                                                                 </div>
@@ -77,12 +74,12 @@
                                                         </div>
                                                         <div class="form-group mt-2 row" id="text-entry-div">
                                                                 <div class="col-12 align-self-start">
-                                                                        <textarea name="input-text" class="form-control" id="text-entry"></textarea>
+                                                                        <textarea name="input-text" class="form-control" id="text-entry"><%= doc.documentBody[0].content %> </textarea>
                                                                 </div>
                                                         </div>
                                                         <div class="form-group mt-2 row hide" id="doc-upload-div">
                                                                 <div class="col-6 align-self-start">
-                                                                        <input name="input-file" type="file" class="form-control" id="doc-upload" accept="application/pdf">
+                                                                        <input name="input-file" type="file" class="form-control" id="doc-upload" accept="application/pdf" />
                                                                         <small class="text-muted">The maximum file size is 4 MB and the preferred file format is PDF.</small>
                                                                 </div>
                                                         </div>

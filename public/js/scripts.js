@@ -9,27 +9,32 @@ function chooseUploadType(){
         var textEntryDiv = document.getElementById("text-entry-div");
         var docUploadDiv = document.getElementById("doc-upload-div");
         var hardCopyDiv = document.getElementById("hard-copy-div");
+        var saveButton = document.getElementById("save-btn");
 
         switch(value){
                 case "1":
                         textEntryDiv.classList.remove("hide");
                         docUploadDiv.classList.add("hide");
                         hardCopyDiv.classList.add("hide");
+                        saveButton.classList.remove("hide");
                         break;
                 case "2":
                         textEntryDiv.classList.add("hide");
                         docUploadDiv.classList.remove("hide");
                         hardCopyDiv.classList.add("hide");
+                        saveButton.classList.add("hide");
                         break;
                 case "3":
                         textEntryDiv.classList.add("hide");
                         docUploadDiv.classList.add("hide");
                         hardCopyDiv.classList.remove("hide");
+                        saveButton.classList.add("hide");
                         break;
                 default:
                         textEntryDiv.classList.add("hide");
                         docUploadDiv.classList.add("hide");
                         hardCopyDiv.classList.add("hide");
+                        saveButton.classList.add("hide");
         }
 
 }
