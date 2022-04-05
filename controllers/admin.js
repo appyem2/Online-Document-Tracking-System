@@ -50,7 +50,7 @@ export const addNewUser = function(req, res){
                         });
                         user.save();
 
-                        //TODO: Setup the mail sending system
+                        // the mail sending system
                         
                         let mailTransporter=nodemailer.createTransport({
                                 service:'gmail',
