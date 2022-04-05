@@ -1,8 +1,5 @@
 import path from 'path';
 import User from '../models/user.js';
-
-
-
 import nodemailer from 'nodemailer';
 
 // Controller function to render "Add New User" page
