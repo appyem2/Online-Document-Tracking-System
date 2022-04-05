@@ -15,14 +15,12 @@
                                 
                                         <div class="col-2 align-self-center">
                                                 <% if (lastUser && !resolved) { %>
-                                                        <button type="button" class="btn btn-outline-primary float-end" onclick="hideUnhide('comment-form')">Add Comment</a>
+                                                        <button type="button" class="btn btn-outline-primary float-end" onclick="hideUnhide('comment-form', 'resolve-form')">Add Comment</a>
                                                 <% } %>
                                         </div>
                                         <div class="col-2 align-self-center">
                                                 <% if(lastUser && !resolved) { %>
-                                                        <form action="/dashboard/<%= user._id %>/resolve/<%= document._id %>" method="POST">
-                                                                <button type="submit" class="btn btn-outline-secondary">Resolve</button>
-                                                        </form>
+                                                        <button type="submit" class="btn btn-outline-secondary" onclick="hideUnhide('resolve-form', 'comment-form')">Resolve</button>
                                                 <% } else if(resolved) { %>
                                                         <h3><span class="badge bg-success">Resolved</span></h3>
                                                 <% } %>
@@ -88,12 +86,68 @@
                                                         </form>
                                                         </div>
                                                 </div>
+
+                                                <!-- The Resolve Form (Initially Hidden)-->
+                                                <div class="card mb-3 hide" id="resolve-form">
+                                                        <div class="card-body">
+                                                                <form action="/dashboard/<%= user._id %>/resolve/<%= document._id %>" method="POST" autocomplete="off" enctype="multipart/form-data"> 
+                                                                
+                                                                <div class="form-group mt-2 row">
+                                                                        <div class="col-3 align-self-start">
+                                                                                <label class="form-label" for="method">I will provide the comment by <span class="text-danger">*</span></label>
+                                                                        </div>
+                                                                        <div class="col-9 align-self-start">
+                                                                                <select class="form-control" id="method-2" name="uploadType" onchange="chooseUploadType('2')">
+                                                                                        <option value="1" selected>Text Entry</option>
+                                                                                        <option value="2">Document Upload</option>
+                                                                                        <option value="3">Hard Copy</option>
+                                                                                </select>
+                                                                        </div>
+                                                                </div>
+                                                                <div class="form-group mt-2 row">
+                                                                        <div class="col-3 align-self-start">
+                                                                                <label class="form-label">Comment <span class="text-danger">*</span></label>
+                                                                        </div>
+                                                                        <div class="col-9 align-self-start"  id="text-entry-div-2">
+                                                                                <textarea name="input-text" class="form-control" id="text-entry"></textarea>
+                                                                        </div>
+                                                                        <div class="col-9 align-self-start hide" id="doc-upload-div-2">
+                                                                                <input name="input-file" type="file" class="form-control" id="doc-upload" accept="application/pdf">
+                                                                                <small class="text-muted">The maximum file size is 4 MB and the preferred file format is PDF.</small>
+                                                                        </div>
+                                                                        <div class="col-9 align-self-start hide" id="hard-copy-div-2">
+                                                                                <input name="input-text-default" type="text" class="form-control" id="hard-copy" readonly value="The document will be sent in a hard copy ">
+                                                                        </div>                                                                        
+                                                                </div>
+                                                                <div class="form-group mt-3 mb-3 row justify-content-end">
+                                                                        <div class="col-9">
+                                                                                <button name="resolve" type="submit" class="btn btn-primary" value="resolve">Resolve</button>
+                                                                        </div>
+                                                                </div>
+                                                        </form>
+                                                        </div>
+                                                </div>       
+                                                
                                                 
                                                 <!-- Document Bodies in a reverse chronological order -->
                                                 <% var index=document.documentBody.length-1 %>
                                                 <% document.documentBody.slice().reverse().forEach(docBody => { %>
                                                         <% if (docBody.from.email == docBody.to.email) { %>
                                                                 <p class="text-center">This document has been resolved by <strong><%= docBody.from.ID.prefix %> <%= docBody.from.ID.firstName %> <%= docBody.from.ID.middleName %> <%= docBody.from.ID.lastName %></strong> <small><<%= docBody.from.email %>></small> on <em><%= docBody.addedOn.toString().substring(4, 25) %></em></p>
+                                                                <div class="card mt-2 mb-2">
+                                                                        <div class="card-body">
+                                                                                <div class="row mb-2">
+                                                                                        <strong>Resolver's Comment</strong>
+                                                                                </div>
+                                                                                <% if (docBody.contentType == "text") { %>
+                                                                                        <div class="col-12">
+                                                                                                <%- docBody.content %>
+                                                                                        </div>
+                                                                                <% } else { %>
+                                                                                        <iframe title="pdf content" src="/files/<%= docBody.content%>" allowfullscreen></iframe>
+                                                                                <% } %>
+                                                                        </div>
+                                                                </div>
                                                         <% } else { %>
                                                         <div class="card mt-2 mb-2">
                                                                 <div class="card-body">

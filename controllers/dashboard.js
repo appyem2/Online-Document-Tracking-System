@@ -714,21 +714,6 @@ export const addComment = function(req, res){
                                         
 
                                 }
-                                // If they opt to SAVE LATER
-                                // else if(data.save === "save"){
-                                //         // Add the document to the user list
-                                //         User.findByIdAndUpdate(user.id, 
-                                //         { 
-                                //                 $push:{ 
-                                //                         drafts: newDocument._id , 
-                                //                         all: newDocument._id
-                                //                 },
-                                //         }, function(updateErr, updatedUser){
-                                //                 if(updateErr) return handleError(updateErr);
-                                //                 res.redirect("/dashboard/"+ user._id+"/drafts");        
-                                //         })
-
-                                // }
 
                         });
                         })
@@ -745,57 +730,118 @@ export const postResolve = function(req, res){
         const userID = req.params.userID;
         const docID = req.params.docID;
 
-        User.findById(userID, function(err,resolver){
 
+        User.findById(userID, (err, user) => {
                 if(err) return handleError(err);
 
-                // Create the new comment      
-                const finalComment = {
-                        from: {
-                                ID: userID,
-                                name: resolver.firstName+" "+resolver.middleName+" "+resolver.lastName,
-                                email: resolver.email,
-                        },
-                        to: {
-                                ID: userID,
-                                name: resolver.firstName+" "+resolver.middleName+" "+resolver.lastName,
-                                email: resolver.email,
-                        },
-                        content: "RESOLVED",
-                        contentType: "text"
-                }
+                if(user){
+                        const form = new formidable.IncomingForm();
+                        const uploadFolder = path.resolve("./public/files");
+                        form.maxFileSize = 40*1024*1024; // 4 MB
+                        form.uploadDir = uploadFolder;
+
+                        form.parse(req, async function(err, fields, files){
+                                
+                                var content = "";
+                                var contentType = "";
+                                const data = fields;
 
 
-                Document.findByIdAndUpdate(docID, {$push: {documentBody: finalComment}}, function(err2, docUpdated){
-                        if(err2) return handleError(err2);
+                                // No file is uploaded
+                                if(files["input-file"]["size"] == 0){
+                                        // If the user chooses "Text Entry"
+                                        if(data.uploadType === '1'){content = data["input-text"]; contentType="text";}
+                                        // If the user chooses "Hard Copy"
+                                        else if(data.uploadType === '3'){content = data["input-text-default"]; contentType="text";}
+                                }
 
-                        console.log(docUpdated);
-                        
-                        docUpdated.documentBody.forEach((docBody, index) => {
-                                const user_id = docBody.from.ID;
+                                // File size exceeds 4MB Size
+                                else if(files["input-file"]["size"] > 40*1024*1024){
+                                        return res.status(400).json({
+                                                status: "Fail",
+                                                message: "Upload Error: Maximum Size Limit Exceeded",
+                                        })
+                                }
 
-                                User.findByIdAndUpdate(user_id, {$addToSet: {resolved: docUpdated._id}}, function(err3, updatedUser){
-                                        if(err3) return handleError(err3); 
-                                        
-                                        if(index == docUpdated.documentBody.length-1){
-                                                
-                                                User.findByIdAndUpdate(userID, {
-                                                        $addToSet:{
-                                                                resolved: docUpdated._id
-                                                        }, 
-                                                        $pull: {
-                                                                pending: docUpdated._id
-                                                        }
-                                                }, function(err3, updatedUser){
-                                                        if(err3) return handleError(err3);
+                                // Succesful File Upload
+                                else{
 
-                                                        res.redirect("/dashboard/" + userID+ "/" + docID);
-                                                })
+                                        const file = files["input-file"];
+                                        const type = file.mimetype.split("/").pop();
+
+                                        if(type != "pdf"){
+                                                return res.status(400).json({
+                                                        status: "Fail",
+                                                        message: "Upload Error: Corrupt File Extension"
+                                                });
                                         }
-                                })
-                        })
-                })
 
+                                        const fileName = user._id +  Date.now() + "." + type;
+
+                                        // If the user chooses "Pdf Upload"
+                                        if(data.uploadType === '2'){content = fileName; contentType="file";}
+                                        fs.renameSync(file.filepath, path.join(uploadFolder, fileName)); 
+
+                                }
+                                
+                                        
+
+                                // Create the new comment      
+                                const finalComment = {
+                                        from: {
+                                                ID: userID,
+                                                name: user.firstName+" "+user.middleName+" "+user.lastName,
+                                                email: user.email,
+                                        },
+                                        to: {
+                                                ID: userID,
+                                                name: user.firstName+" "+user.middleName+" "+user.lastName,
+                                                email: user.email,
+                                        },
+                                        content: content,
+                                        contentType: contentType
+                                }
+
+                        
+                                // If they opt to RESOLVE NOW
+                                if(data.resolve === "resolve"){
+
+                                        Document.findByIdAndUpdate(docID, {$push:{documentBody: finalComment}}, function(updateErr, docUpdated){
+                                                if(updateErr) return handleError(updateErr);
+                                                
+                                                docUpdated.documentBody.forEach((docBody, index) => {
+                                                        const user_id = docBody.from.ID;
+
+                                                        User.findByIdAndUpdate(user_id, {$addToSet: {resolved: docUpdated._id}}, function(err3, updatedUser){
+                                                                if(err3) return handleError(err3); 
+                                                                
+                                                                if(index == docUpdated.documentBody.length-1){
+                                                                        
+                                                                        User.findByIdAndUpdate(userID, {
+                                                                                $addToSet:{
+                                                                                        resolved: docUpdated._id
+                                                                                }, 
+                                                                                $pull: {
+                                                                                        pending: docUpdated._id
+                                                                                }
+                                                                        }, function(err3, updatedUser){
+                                                                                if(err3) return handleError(err3);
+
+                                                                                res.redirect("/dashboard/" + userID+ "/" + docID);
+                                                                        })
+                                                                }
+                                                        })
+                                                })
+
+                                        })
+                                        
+
+                                }
+
+                        
+                        })
+                        
+                }
         })
 }
 
