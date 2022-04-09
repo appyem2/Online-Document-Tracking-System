@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const documentSchema = new mongoose.Schema({
         createdOn: {
                 type: Date, 
-                default: new Date()
+                default: Date.now
         },
         author: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
         subject: String,
@@ -21,7 +21,7 @@ const documentSchema = new mongoose.Schema({
                 content: String,
                 contentType: String,
                 addedOn: {
-                        type: Date, default: new Date()
+                        type: Date, default: Date.now
                 }
         }],
 });
