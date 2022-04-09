@@ -44,7 +44,7 @@
                                                                         </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                        <% docs.reverse().forEach(doc => { %>
+                                                                        <% docs.forEach(doc => { %>
                                                                                 <tr>
                                                                                         <td><a href="/dashboard/<%= user._id %>/<%= doc._id %>"><%= doc._id %></a></td>
                                                                                         <td><%= doc.subject %></td>

@@ -53,11 +53,28 @@ export const getPending = function(req, res){
                 if(err) return handleError(err);
 
                 if(user){
-                        Document.find({_id: { $in:  user.pending }}, function(findErr, docs){
+                       // Document.find({_id: { $in:  user.pending }}, function(findErr, docs){
+                        //        if(findErr) return handleError(findErr);
+
+                        // sorting documents by date addedOn
+                        var documents=[];
+                        var dates=[];
+                        Document.find({_id: { $in:  user.all }}, function(findErr, docs){
                                 if(findErr) return handleError(findErr);
+                                docs.forEach(doc=>{
+                                        var obj={
+                                                docid: doc,
+                                                date: doc.documentBody[doc.documentBody.length-1].addedOn
+                                        }
+                                        dates.push(obj);
+                                })
+                                const sortedDates = dates.sort((a, b) => b.date - a.date);
+                                sortedDates.forEach(d=>{
+                                        documents.push(d.docid);
+                                })
                                 res.render(path.resolve('./views/pending.ejs'), {
                                         user: user, 
-                                        docs: docs
+                                        docs: documents
                                 });
                         })
                 }
@@ -186,6 +203,7 @@ export const getAllDocuments = function(req, res){
                 if(err) return handleError(err);
 
                 if(user){
+                        // sorting documents by date addedOn
                         var documents=[];
                         var dates=[];
                         Document.find({_id: { $in:  user.all }}, function(findErr, docs){
