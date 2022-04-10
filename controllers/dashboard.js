@@ -59,7 +59,7 @@ export const getPending = function(req, res){
                         // sorting documents by date addedOn
                         var documents=[];
                         var dates=[];
-                        Document.find({_id: { $in:  user.all }}, function(findErr, docs){
+                        Document.find({_id: { $in:  user.pending }}, function(findErr, docs){
                                 if(findErr) return handleError(findErr);
                                 docs.forEach(doc=>{
                                         var obj={
@@ -146,7 +146,7 @@ export const getDrafts = function(req, res){
                          // sorting documents by date addedOn
                          var documents=[];
                          var dates=[];
-                         Document.find({_id: { $in:  user.all }}, function(findErr, docs){
+                         Document.find({_id: { $in:  user.drafts }}, function(findErr, docs){
                                  if(findErr) return handleError(findErr);
                                  docs.forEach(doc=>{
                                          var obj={
@@ -205,7 +205,7 @@ export const getResolved = function(req, res){
                         // sorting documents by date addedOn
                         var documents=[];
                         var dates=[];
-                        Document.find({_id: { $in:  user.all }}, function(findErr, docs){
+                        Document.find({_id: { $in:  user.resolved }}, function(findErr, docs){
                                 if(findErr) return handleError(findErr);
                                 docs.forEach(doc=>{
                                         var obj={
