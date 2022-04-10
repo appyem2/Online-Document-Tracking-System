@@ -678,6 +678,11 @@ export const addComment = function(req, res){
                                         if(data.uploadType === '1'){content = data["input-text"]; contentType="text";}
                                         // If the user chooses "Hard Copy"
                                         else if(data.uploadType === '3'){content = data["input-text-default"]; contentType="text";}
+
+                                        fs.unlink(files["input-file"]["filepath"], function(err){
+                                                if(err) return console.log(err);
+                                                console.log('file deleted successfully');
+                                        });
                                 }
 
                                 // File size exceeds 4MB Size
@@ -805,6 +810,11 @@ export const postResolve = function(req, res){
                                         if(data.uploadType === '1'){content = data["input-text"]; contentType="text";}
                                         // If the user chooses "Hard Copy"
                                         else if(data.uploadType === '3'){content = data["input-text-default"]; contentType="text";}
+
+                                        fs.unlink(files["input-file"]["filepath"], function(err){
+                                                if(err) return console.log(err);
+                                                console.log('file deleted successfully');
+                                        });
                                 }
 
                                 // File size exceeds 4MB Size
