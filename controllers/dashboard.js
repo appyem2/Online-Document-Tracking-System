@@ -525,7 +525,7 @@ export const postEditPassword = function(req, res){
 function generateDocID(fname, lname){
         const d =new Date();
         const day = d.getDate();
-        const month = d.getMonth();
+        const month = d.getMonth()+1;
         const year = d.getFullYear();
         const hours = d.getHours();
         const minutes = d.getMinutes();
