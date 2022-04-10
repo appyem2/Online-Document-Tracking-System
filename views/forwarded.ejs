@@ -46,7 +46,7 @@
                                                                 <tbody>
                                                                         <% docs.forEach((doc,index) => { %>
                                                                                 <tr>
-                                                                                        <td><a href="/dashboard/<%= user._id %>/<%= doc._id %>"><%= doc._id %></a></td>
+                                                                                        <td><a href="/dashboard/<%= user._id %>/<%= doc._id %>"><%= (doc.d_id == undefined)? doc._id: doc.d_id %></a></td>
                                                                                         <td><%= doc.subject %> </td>
                                                                                         <td><%= doc.documentBody[docBodyIndex[index]].addedOn.toString().substring(4, 25) %></td>
 

@@ -5,6 +5,7 @@ import formidable from 'formidable';
 import fs from 'fs';
 
 
+
 // controller function to render "First Time Login Page"
 export const getSignInFirstTime = function(req, res){
         const userID = req.params.userID;
@@ -504,6 +505,22 @@ export const postEditPassword = function(req, res){
 
 }
 
+function generateDocID(fname, lname){
+        const d =new Date();
+        const day = d.getDate();
+        const month = d.getMonth();
+        const year = d.getFullYear();
+        const hours = d.getHours();
+        const minutes = d.getMinutes();
+        const seconds = d.getSeconds();
+        const name = fname[0] + lname[0];
+
+        const ID = name+day+month+year+hours+minutes+seconds;
+
+        return ID;
+
+}
+
 // controller function to handle "Create New Document" request
 export const createNewDocument = function(req, res){
 
@@ -574,6 +591,7 @@ export const createNewDocument = function(req, res){
                                 
                                 // Create the new document      
                                 const newDocument = new Document({
+                                        d_id: generateDocID(user.firstName, user.lastName),
                                         subject: data.subject,
                                         author: userID,
                                         documentBody: [{
@@ -591,7 +609,8 @@ export const createNewDocument = function(req, res){
                                                 contentType: contentType
                                         }],
                                 });
-                        
+                                
+
                                 // Save the new document
                                 newDocument.save();
                                 

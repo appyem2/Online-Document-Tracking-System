@@ -10,7 +10,7 @@
                                 <div class="row justify-content-around">
                                         <div class="col-10">
                                                 <h2><%= doc.subject %></h2>
-                                                <h5 class="text-muted">Document ID: <%= doc._id %> </h5>
+                                                <h5 class="text-muted">Document ID: <%= (doc.d_id == undefined)? doc._id: doc.d_id %> </h5>
                                                 <hr>
                                         </div>
                                 </div>

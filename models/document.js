@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 const documentSchema = new mongoose.Schema({
+        d_id: String,
         createdOn: {
                 type: Date, 
                 default: Date.now
