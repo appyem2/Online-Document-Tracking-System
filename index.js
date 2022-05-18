@@ -32,6 +32,9 @@ const port = process.env.PORT || 8080;
 
 // Setup the MongoDB database
 const CONNECTION_URL = "mongodb+srv://"+"admin-souradip"+":"+"510818009"+"@cluster0.kfy9c.mongodb.net/"+"majorProjectDB"+"?retryWrites=true&w=majority"
+
+// const CONNECTION_URL = "'mongodb://localhost:27017/majorProjectDB";
+
 const conn = mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
         .then(() => app.listen(port, function() {
                 console.log('express server listening on port ' + port);
